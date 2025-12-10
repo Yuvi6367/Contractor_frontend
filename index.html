@@ -431,11 +431,11 @@
 
             siteWorkers.forEach(w => {
                 const key = `${selectedDate}-${w.id}`;
-                const log = appData.attendance[key] || { status: 'P', ot: '', note: '' };
+                const log = appData.attendance[key] || { status: '', ot: '', note: '' };
                 const div = document.createElement('div');
                 div.className = 'worker-card';
                 div.innerHTML = `
-                    <div class="card-header-clickable" onclick="window.location.href='Labour.html?id=${w.id}'">
+                    <div class="card-header-clickable" onclick="window.location.href='labour.html?id=${w.id}'">
                         <div class="card-top">
                             <div class="profile-info">
                                 <div class="avatar">${w.name.charAt(0)}</div>
@@ -480,7 +480,7 @@
             const siteWorkers = appData.workers.filter(w => w.siteId === appData.currentSiteId);
             siteWorkers.forEach(w => {
                 const key = `${selectedDate}-${w.id}`;
-                const log = appData.attendance[key] || { status: 'P', ot: 0 };
+                const log = appData.attendance[key] || { status: '', ot: 0 };
                 if(log.status === 'P') { p++; cost += Number(w.wage) + ((w.wage/8)*(log.ot||0)); }
                 else if(log.status === 'H') { p++; cost += (w.wage/2); }
                 else { a++; }
@@ -636,5 +636,4 @@
         init();
     </script>
 </body>
-
 </html>
