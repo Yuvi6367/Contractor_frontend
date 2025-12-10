@@ -6,18 +6,18 @@
     <title>Worker Profile</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
-            --primary: #4F46E5;
-            --bg: #F1F5F9;
-            --surface: #FFFFFF;
-            --text-main: #0F172A;
-            --text-sub: #64748B;
-            --green: #10B981;
-            --red: #EF4444;
-            --orange: #F59E0B;
-        }
+    --primary: #4338ca; /* Darker Blue for contrast */
+    --bg: #F8FAFC;
+    --surface: #FFFFFF;
+    --text-main: #000000; /* Pure Black for readability */
+    --text-sub: #334155;  /* Darker Grey */
+    --green: #059669;     /* Darker Green */
+    --red: #DC2626;       /* Darker Red */
+    --orange: #D97706;    /* Darker Orange */
+}
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text-main); margin: 0; padding-bottom: 40px; }
@@ -54,27 +54,47 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.05); 
             border: 1px solid #E2E8F0;
         }
-        .ms-val { font-weight: 800; font-size: 1.1rem; display: block; margin-bottom: 2px; }
-        .ms-lbl { font-size: 0.65rem; color: var(--text-sub); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
-        
+/* Larger Stat Numbers at the top */
+.ms-val {
+    font-size: 1.4rem;
+}.ms-lbl {
+    font-size: 0.75rem;
+    color: #000;
+    font-weight: 700;
+}        
         /* Highlight Total Box */
         .total-card { border: 2px solid var(--text-main); background: #F8FAFC; min-width: 100px; }
 
         /* LOG LIST */
         .log-list { padding: 0 20px; }
         .log-row { display: flex; justify-content: space-between; align-items: center; background: white; padding: 8px 15px; border-radius: 12px; margin-bottom: 8px; border: 1px solid #E2E8F0; min-height: 55px; }
-        .log-date { display: flex; gap: 10px; align-items: center; font-weight: 600; font-size: 0.95rem; min-width: 90px; }
-        .log-date span { color: var(--text-sub); font-size: 0.8rem; font-weight: 400; width: 30px; }
+        .log-date {
+    font-size: 1.2rem; /* Was 0.95rem */
+    gap: 15px;
+}
+        .log-date span {
+    font-size: 0.95rem; /* Day name larger */
+    font-weight: 600;
+    color: #475569;
+}
         .log-right { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
 
         /* BUTTONS & BADGES */
         .action-group { display: flex; gap: 6px; }
-        .mini-btn { width: 32px; height: 32px; border-radius: 8px; border: 1px solid #E2E8F0; background: #F8FAFC; color: var(--text-sub); font-weight: 700; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-        .mini-btn.ot-btn { width: auto; padding: 0 8px; background: #EEF2FF; color: var(--primary); border-color: #C7D2FE; }
+.mini-btn {
+    width: 45px;      /* Was 32px */
+    height: 45px;     /* Was 32px */
+    font-size: 1rem;  /* Larger text */
+    border: 2px solid #CBD5E1; /* Thicker border */
+}        .mini-btn.ot-btn { width: auto; padding: 0 8px; background: #EEF2FF; color: var(--primary); border-color: #C7D2FE; }
         .mini-btn.pay-btn { width: auto; padding: 0 8px; background: #DCFCE7; color: #166534; border-color: #86EFAC; }
         
-        .status-badge { width: 32px; height: 32px; border-radius: 8px; font-weight: 700; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-        .st-p { background: #DCFCE7; color: var(--green); border: 1px solid #bbf7d0; }
+.status-badge {
+    width: 45px;
+    height: 45px;
+    font-size: 1.1rem;
+    border-width: 2px;
+}        .st-p { background: #DCFCE7; color: var(--green); border: 1px solid #bbf7d0; }
         .st-a { background: #FEE2E2; color: var(--red); border: 1px solid #fecaca; }
         .st-h { background: #FEF3C7; color: var(--orange); border: 1px solid #fde68a; }
         
@@ -95,14 +115,80 @@
         .slide-modal-overlay.active { display: flex; }
         .slide-modal-card { background: white; width: 100%; border-radius: 24px 24px 0 0; padding: 25px; animation: slideUp 0.3s forwards; transform: translateY(100%); }
         @keyframes slideUp { to { transform: translateY(0); } }
+    /* --- REPORT CARD DESIGN (Hidden from view normally) --- */
+#reportCard {
+    position: fixed;
+    top: 0; left: -9999px; /* Hide it off-screen */
+    width: 600px;          /* Fixed width for consistent image size */
+    background: white;
+    font-family: 'Inter', sans-serif;
+    color: #1e293b;
+    border: 1px solid #e2e8f0;
+}
 
+.rc-header {
+    background: linear-gradient(135deg, #4F46E5 0%, #818cf8 100%); /* Nice Purple Gradient */
+    color: white;
+    padding: 30px;
+    border-radius: 0 0 20px 20px;
+}
+
+.rc-title { font-size: 1.8rem; font-weight: 800; margin: 0; }
+.rc-subtitle { font-size: 1.1rem; opacity: 0.9; margin-top: 5px; }
+
+.rc-body { padding: 20px; }
+
+.rc-row {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 1.1rem;
+}
+.rc-row:nth-child(even) { background-color: #f8fafc; } /* Zebra Striping */
+
+.rc-date { width: 30%; font-weight: 600; color: #64748B; }
+.rc-status { width: 30%; font-weight: 800; }
+.rc-extra { width: 40%; text-align: right; color: #059669; font-weight: 600; }
+
+.rc-status.P { color: #059669; } /* Green */
+.rc-status.A { color: #EF4444; } /* Red */
+.rc-status.H { color: #D97706; } /* Orange */
+
+.rc-footer {
+    background: #1e293b;
+    color: white;
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.3rem;
+    font-weight: 700;
+}
     </style>
 </head>
 <body>
+    <div id="reportCard">
+    <div class="rc-header">
+        <h2 class="rc-title" id="rcName">Worker Name</h2>
+        <div class="rc-subtitle"><span id="rcRole">Role</span> • <span id="rcMonth">Month</span></div>
+    </div>
+    <div class="rc-body" id="rcBody">
+        </div>
+    <div class="rc-footer">
+        <span>Total Due</span>
+        <span id="rcDue" style="color: #4ade80;">₹0</span>
+    </div>
+</div>
 
     <div class="profile-header">
-        <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
-        <div class="big-avatar" id="dAvatar"></div>
+<a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
+
+<div onclick="shareWhatsapp()" class="back-btn" style="color:#25D366; margin-right:auto; margin-left:10px; cursor:pointer;">
+    <i class="fa-brands fa-whatsapp" style="font-size:1.5rem;"></i>
+</div>
+
+<div class="big-avatar" id="dAvatar"></div>
         <div class="profile-meta"><h2 id="dName">Loading...</h2><p id="dRole">...</p></div>
     </div>
 
@@ -169,8 +255,7 @@
     <script>
         // --- CONFIGURATION ---
         // Change to your Render URL when deployed
-        const API_URL = "https://contractorpro.onrender.com/api"; 
-
+const API_URL = "https://contractorpro.onrender.com/api";
         // --- AUTH CHECK ---
         const token = localStorage.getItem('token');
         if (!token) {
@@ -506,14 +591,107 @@
                 // e.g. await authFetch(`${API_URL}/workers/update`, ...)
             }
         }
-        
-        function deleteWorker() {
-            if (confirm('Permanently delete this worker?')) {
-                // UI Update
-                appData.workers.splice(workerIndex, 1);
-                window.location.href = 'index.html';
-            }
+        // --- REPLACE YOUR shareWhatsapp FUNCTION WITH THIS ---
+// --- REPLACE THE OLD shareWhatsapp FUNCTION WITH THIS ---
+async function shareWhatsapp() {
+    const w = appData.workers[workerIndex];
+    
+    // 1. Fill the Report Card Data
+    document.getElementById('rcName').innerText = w.name;
+    document.getElementById('rcRole').innerText = w.role;
+    document.getElementById('rcMonth').innerText = document.getElementById('displayMonth').innerText;
+    document.getElementById('rcDue').innerText = document.getElementById('sumDue').innerText;
+
+    const list = document.getElementById('rcBody');
+    list.innerHTML = ''; // Clear old rows
+
+    const year = currentMonthDate.getFullYear();
+    const month = currentMonthDate.getMonth();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    // 2. Build the Rows
+    for (let day = 1; day <= daysInMonth; day++) {
+        const monthStr = String(month + 1).padStart(2, '0');
+        const dayStr = String(day).padStart(2, '0');
+        const isoDate = `${year}-${monthStr}-${dayStr}`;
+        const dateObj = new Date(year, month, day);
+        const dayName = dateObj.toLocaleDateString('en-US', { weekday: 'short' });
+
+        const key = `${isoDate}-${workerId}`;
+        const log = appData.attendance[key];
+
+        // Only show rows that have data
+        if (log && (log.status || log.payment)) {
+            let statusHtml = log.status ? `<span class="rc-status ${log.status}">${log.status}</span>` : '<span class="rc-status">-</span>';
+            let extraText = [];
+            if(log.ot) extraText.push(`+${log.ot}h OT`);
+            if(log.payment) extraText.push(`Paid ₹${log.payment}`);
+            
+            const row = document.createElement('div');
+            row.className = 'rc-row';
+            row.innerHTML = `
+                <div class="rc-date">${dayStr} ${dayName}</div>
+                ${statusHtml}
+                <div class="rc-extra">${extraText.join(', ')}</div>
+            `;
+            list.appendChild(row);
         }
+    }
+
+    // 3. Generate Image & Share
+    try {
+        const canvas = await html2canvas(document.getElementById('reportCard'));
+        
+        canvas.toBlob(async (blob) => {
+            const file = new File([blob], `Report_${w.name}.png`, { type: "image/png" });
+
+            // Check if browser supports direct file sharing (Mobile mostly)
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        files: [file],
+                        title: 'Worker Report',
+                        text: `Attendance Report for ${w.name}`
+                    });
+                } catch (err) {
+                    console.log("Share cancelled or failed", err);
+                }
+            } else {
+                // Fallback for Desktop: Just download it
+                const link = document.createElement('a');
+                link.download = `Report_${w.name}.png`;
+                link.href = canvas.toDataURL();
+                link.click();
+                alert("Image downloaded! You can now send it on WhatsApp.");
+            }
+        });
+    } catch (err) {
+        console.error("Error generating image:", err);
+        alert("Could not generate image.");
+    }
+}
+ // --- REPLACE THE OLD deleteWorker FUNCTION WITH THIS ---
+async function deleteWorker() {
+    if (confirm('Permanently delete this worker and all their history? This cannot be undone.')) {
+        try {
+            // 1. Send DELETE request to server
+            const res = await authFetch(`${API_URL}/workers/${workerId}`, {
+                method: 'DELETE'
+            });
+
+            // 2. If successful, go back to home
+            if (res && res.ok) {
+                alert("Worker deleted successfully.");
+                window.location.href = 'index.html';
+            } else {
+                alert("Server failed to delete.");
+            }
+        } catch (e) {
+            console.error(e);
+            alert("Connection error.");
+        }
+    }
+}
 
         init();
     </script>
