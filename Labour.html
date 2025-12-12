@@ -9,15 +9,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
-    --primary: #4338ca; /* Darker Blue for contrast */
-    --bg: #F8FAFC;
-    --surface: #FFFFFF;
-    --text-main: #000000; /* Pure Black for readability */
-    --text-sub: #334155;  /* Darker Grey */
-    --green: #059669;     /* Darker Green */
-    --red: #DC2626;       /* Darker Red */
-    --orange: #D97706;    /* Darker Orange */
-}
+            --primary: #4338ca;
+            --bg: #F8FAFC;
+            --surface: #FFFFFF;
+            --text-main: #000000;
+            --text-sub: #334155;
+            --green: #059669;
+            --red: #DC2626;
+            --orange: #D97706;
+        }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text-main); margin: 0; padding-bottom: 40px; }
@@ -40,13 +40,13 @@
             padding: 15px 20px; 
             display: flex; 
             gap: 12px; 
-            scrollbar-width: none; /* Firefox */
+            scrollbar-width: none;
         }
-        .stats-container::-webkit-scrollbar { display: none; /* Chrome/Safari */ }
+        .stats-container::-webkit-scrollbar { display: none; }
         
         .m-stat-card { 
             min-width: 85px; 
-            flex-shrink: 0; /* Prevent shrinking */
+            flex-shrink: 0; 
             background: white; 
             padding: 12px 10px; 
             border-radius: 12px; 
@@ -54,52 +54,30 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.05); 
             border: 1px solid #E2E8F0;
         }
-/* Larger Stat Numbers at the top */
-.ms-val {
-    font-size: 1.4rem;
-}.ms-lbl {
-    font-size: 0.75rem;
-    color: #000;
-    font-weight: 700;
-}        
-        /* Highlight Total Box */
+        .ms-val { font-size: 1.4rem; font-weight: 700; display:block; }
+        .ms-lbl { font-size: 0.75rem; color: #000; font-weight: 700; }        
         .total-card { border: 2px solid var(--text-main); background: #F8FAFC; min-width: 100px; }
 
         /* LOG LIST */
         .log-list { padding: 0 20px; }
         .log-row { display: flex; justify-content: space-between; align-items: center; background: white; padding: 8px 15px; border-radius: 12px; margin-bottom: 8px; border: 1px solid #E2E8F0; min-height: 55px; }
-        .log-date {
-    font-size: 1.2rem; /* Was 0.95rem */
-    gap: 15px;
-}
-        .log-date span {
-    font-size: 0.95rem; /* Day name larger */
-    font-weight: 600;
-    color: #475569;
-}
+        .log-date { font-size: 1.2rem; display: flex; flex-direction: column; line-height: 1.1; }
+        .log-date span { font-size: 0.8rem; font-weight: 600; color: #475569; }
         .log-right { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
 
         /* BUTTONS & BADGES */
         .action-group { display: flex; gap: 6px; }
-.mini-btn {
-    width: 45px;      /* Was 32px */
-    height: 45px;     /* Was 32px */
-    font-size: 1rem;  /* Larger text */
-    border: 2px solid #CBD5E1; /* Thicker border */
-}        .mini-btn.ot-btn { width: auto; padding: 0 8px; background: #EEF2FF; color: var(--primary); border-color: #C7D2FE; }
-        .mini-btn.pay-btn { width: auto; padding: 0 8px; background: #DCFCE7; color: #166534; border-color: #86EFAC; }
+        .mini-btn { width: 45px; height: 45px; font-size: 1rem; border: 2px solid #CBD5E1; border-radius: 10px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-weight:600; color: #64748B; background:white; }        
+        .mini-btn.ot-btn { width: auto; padding: 0 12px; background: #EEF2FF; color: var(--primary); border-color: #C7D2FE; }
+        .mini-btn.pay-btn { width: auto; padding: 0 12px; background: #DCFCE7; color: #166534; border-color: #86EFAC; }
         
-.status-badge {
-    width: 45px;
-    height: 45px;
-    font-size: 1.1rem;
-    border-width: 2px;
-}        .st-p { background: #DCFCE7; color: var(--green); border: 1px solid #bbf7d0; }
-        .st-a { background: #FEE2E2; color: var(--red); border: 1px solid #fecaca; }
-        .st-h { background: #FEF3C7; color: var(--orange); border: 1px solid #fde68a; }
+        .status-badge { width: 45px; height: 45px; font-size: 1.1rem; border-width: 2px; border-style:solid; border-radius: 10px; display:flex; align-items:center; justify-content:center; font-weight:700; cursor:pointer;}        
+        .st-p { background: #DCFCE7; color: var(--green); border-color: #bbf7d0; }
+        .st-a { background: #FEE2E2; color: var(--red); border-color: #fecaca; }
+        .st-h { background: #FEF3C7; color: var(--orange); border-color: #fde68a; }
         
-        .ot-tag { font-size: 0.75rem; background: #EEF2FF; padding: 2px 6px; border-radius: 4px; color: var(--primary); margin-left: 5px; border: 1px solid #C7D2FE; }
-        .pay-badge { font-size: 0.75rem; font-weight: 600; color: #15803d; background: #f0fdf4; padding: 2px 8px; border-radius: 20px; border: 1px solid #bbf7d0; display: inline-block; cursor: pointer; }
+        .ot-tag { font-size: 0.75rem; background: #EEF2FF; padding: 2px 6px; border-radius: 4px; color: var(--primary); margin-right: 5px; border: 1px solid #C7D2FE; font-weight:600; }
+        .pay-badge { font-size: 0.75rem; font-weight: 600; color: #15803d; background: #f0fdf4; padding: 4px 10px; border-radius: 20px; border: 1px solid #bbf7d0; display: inline-block; cursor: pointer; }
 
         /* SETTINGS */
         .settings-section { padding: 20px; margin-top: 20px; background: white; border-top: 1px solid #E2E8F0; }
@@ -115,80 +93,64 @@
         .slide-modal-overlay.active { display: flex; }
         .slide-modal-card { background: white; width: 100%; border-radius: 24px 24px 0 0; padding: 25px; animation: slideUp 0.3s forwards; transform: translateY(100%); }
         @keyframes slideUp { to { transform: translateY(0); } }
-    /* --- REPORT CARD DESIGN (Hidden from view normally) --- */
-#reportCard {
-    position: fixed;
-    top: 0; left: -9999px; /* Hide it off-screen */
-    width: 600px;          /* Fixed width for consistent image size */
-    background: white;
-    font-family: 'Inter', sans-serif;
-    color: #1e293b;
-    border: 1px solid #e2e8f0;
-}
 
-.rc-header {
-    background: linear-gradient(135deg, #4F46E5 0%, #818cf8 100%); /* Nice Purple Gradient */
-    color: white;
-    padding: 30px;
-    border-radius: 0 0 20px 20px;
-}
+        /* --- UPDATED REPORT CARD DESIGN --- */
+        #reportCard {
+            position: fixed; top: 0; left: -9999px;
+            width: 600px; background: white; font-family: 'Inter', sans-serif; color: #1e293b; border: 1px solid #e2e8f0;
+        }
+        .rc-header { background: linear-gradient(135deg, #4F46E5 0%, #818cf8 100%); color: white; padding: 30px; border-radius: 0 0 20px 20px; }
+        .rc-title { font-size: 1.8rem; font-weight: 800; margin: 0; }
+        .rc-subtitle { font-size: 1.1rem; opacity: 0.9; margin-top: 5px; }
+        
+        /* New Stats Grid for WhatsApp */
+        .rc-stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; padding: 20px; background: #F8FAFC; border-bottom: 1px solid #E2E8F0; }
+        .rc-stat-box { text-align: center; background:white; padding:10px; border-radius:10px; border:1px solid #E2E8F0; }
+        .rc-stat-val { font-size: 1.5rem; font-weight: 800; display: block; }
+        .rc-stat-lbl { font-size: 0.8rem; color: #64748B; font-weight: 700; text-transform: uppercase; margin-top:5px; }
 
-.rc-title { font-size: 1.8rem; font-weight: 800; margin: 0; }
-.rc-subtitle { font-size: 1.1rem; opacity: 0.9; margin-top: 5px; }
-
-.rc-body { padding: 20px; }
-
-.rc-row {
-    display: flex;
-    align-items: center;
-    padding: 12px 15px;
-    border-bottom: 1px solid #f1f5f9;
-    font-size: 1.1rem;
-}
-.rc-row:nth-child(even) { background-color: #f8fafc; } /* Zebra Striping */
-
-.rc-date { width: 30%; font-weight: 600; color: #64748B; }
-.rc-status { width: 30%; font-weight: 800; }
-.rc-extra { width: 40%; text-align: right; color: #059669; font-weight: 600; }
-
-.rc-status.P { color: #059669; } /* Green */
-.rc-status.A { color: #EF4444; } /* Red */
-.rc-status.H { color: #D97706; } /* Orange */
-
-.rc-footer {
-    background: #1e293b;
-    color: white;
-    padding: 20px 30px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 1.3rem;
-    font-weight: 700;
-}
+        .rc-body { padding: 20px; }
+        .rc-row { display: flex; align-items: center; padding: 12px 15px; border-bottom: 1px solid #f1f5f9; font-size: 1.1rem; }
+        .rc-row:nth-child(even) { background-color: #f8fafc; }
+        .rc-date { width: 30%; font-weight: 600; color: #64748B; }
+        .rc-status { width: 30%; font-weight: 800; }
+        .rc-extra { width: 40%; text-align: right; color: #059669; font-weight: 600; }
+        .rc-status.P { color: #059669; }
+        .rc-status.A { color: #EF4444; }
+        .rc-status.H { color: #D97706; }
+        
+        .rc-footer { background: #1e293b; color: white; padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; font-size: 1.5rem; font-weight: 700; }
     </style>
 </head>
 <body>
     <div id="reportCard">
-    <div class="rc-header">
-        <h2 class="rc-title" id="rcName">Worker Name</h2>
-        <div class="rc-subtitle"><span id="rcRole">Role</span> • <span id="rcMonth">Month</span></div>
-    </div>
-    <div class="rc-body" id="rcBody">
+        <div class="rc-header">
+            <h2 class="rc-title" id="rcName">Worker Name</h2>
+            <div class="rc-subtitle"><span id="rcRole">Role</span> • <span id="rcMonth">Month</span></div>
         </div>
-    <div class="rc-footer">
-        <span>Total Due</span>
-        <span id="rcDue" style="color: #4ade80;">₹0</span>
+        
+        <div class="rc-stats-grid">
+            <div class="rc-stat-box"><span class="rc-stat-val" id="rcP" style="color:var(--green)">0</span><span class="rc-stat-lbl">Present</span></div>
+            <div class="rc-stat-box"><span class="rc-stat-val" id="rcH" style="color:var(--orange)">0</span><span class="rc-stat-lbl">Half Day</span></div>
+            <div class="rc-stat-box"><span class="rc-stat-val" id="rcA" style="color:var(--red)">0</span><span class="rc-stat-lbl">Absent</span></div>
+            <div class="rc-stat-box"><span class="rc-stat-val" id="rcOt" style="color:var(--primary)">0</span><span class="rc-stat-lbl">OT Hours</span></div>
+            <div class="rc-stat-box"><span class="rc-stat-val" id="rcEarned" style="color:#0F172A">0</span><span class="rc-stat-lbl">Earned</span></div>
+            <div class="rc-stat-box"><span class="rc-stat-val" id="rcPaid" style="color:#15803d">0</span><span class="rc-stat-lbl">Paid</span></div>
+        </div>
+
+        <div class="rc-body" id="rcBody"></div>
+        <div class="rc-footer">
+            <span>Total Due</span>
+            <span id="rcDue" style="color: #4ade80;">₹0</span>
+        </div>
     </div>
-</div>
 
     <div class="profile-header">
-<a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
-
-<div onclick="shareWhatsapp()" class="back-btn" style="color:#25D366; margin-right:auto; margin-left:10px; cursor:pointer;">
-    <i class="fa-brands fa-whatsapp" style="font-size:1.5rem;"></i>
-</div>
-
-<div class="big-avatar" id="dAvatar"></div>
+        <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
+        <div onclick="shareWhatsapp()" class="back-btn" style="color:#25D366; margin-right:auto; margin-left:10px; cursor:pointer;">
+            <i class="fa-brands fa-whatsapp" style="font-size:1.5rem;"></i>
+        </div>
+        <div class="big-avatar" id="dAvatar"></div>
         <div class="profile-meta"><h2 id="dName">Loading...</h2><p id="dRole">...</p></div>
     </div>
 
@@ -203,10 +165,8 @@
         <div class="m-stat-card"><span class="ms-val" style="color:var(--orange)" id="cntH">0</span><span class="ms-lbl">Half Day</span></div>
         <div class="m-stat-card"><span class="ms-val" style="color:var(--red)" id="cntA">0</span><span class="ms-lbl">Absent</span></div>
         <div class="m-stat-card"><span class="ms-val" style="color:var(--primary)" id="sumOT">0</span><span class="ms-lbl">OT</span></div>
-        
         <div class="m-stat-card"><span class="ms-val" id="sumEarned">₹0</span><span class="ms-lbl">Work</span></div>
         <div class="m-stat-card"><span class="ms-val" style="color:#15803d" id="sumPaid">₹0</span><span class="ms-lbl">Paid</span></div>
-        
         <div class="m-stat-card total-card"><span class="ms-val" style="color:var(--red)" id="sumDue">₹0</span><span class="ms-lbl">Total</span></div>
     </div>
 
@@ -253,14 +213,11 @@
     </div>
 
     <script>
-        // --- CONFIGURATION ---
-        // Change to your Render URL when deployed
-const API_URL = "https://contractorpro.onrender.com/api";
-        // --- AUTH CHECK ---
+    const API_URL = "https://contractorpro.onrender.com/api"; 
+        // const API_URL = "http://localhost:3000/api";
+        
         const token = localStorage.getItem('token');
-        if (!token) {
-            window.location.href = 'login.html';
-        }
+        if (!token) window.location.href = 'login.html';
 
         const urlParams = new URLSearchParams(window.location.search);
         const workerId = Number(urlParams.get('id'));
@@ -268,14 +225,11 @@ const API_URL = "https://contractorpro.onrender.com/api";
         let currentMonthDate = new Date(); 
         let workerIndex = -1;
         let activeDateStr = null;
-        let currentEditingPayAmount = 0; 
 
-        // --- AUTH FETCH HELPER ---
         async function authFetch(url, options = {}) {
             if (!options.headers) options.headers = {};
             options.headers['Authorization'] = 'Bearer ' + token;
             options.headers['Content-Type'] = 'application/json';
-
             try {
                 const response = await fetch(url, options);
                 if (response.status === 401 || response.status === 403) {
@@ -284,44 +238,33 @@ const API_URL = "https://contractorpro.onrender.com/api";
                     return null;
                 }
                 return response;
-            } catch (err) {
-                console.error("Network Error:", err);
-                return null;
-            }
+            } catch (err) { console.error("Network Error:", err); return null; }
         }
 
         async function init() {
-            try {
-                // Use authFetch instead of regular fetch
-                const res = await authFetch(`${API_URL}/data`);
-                if(!res) return;
+            const res = await authFetch(`${API_URL}/data`);
+            if(!res) return;
+            const serverData = await res.json();
+            
+            appData = {
+                workers: serverData.workers || [],
+                attendance: serverData.attendance || {},
+                transactions: serverData.transactions || []
+            };
 
-                const serverData = await res.json();
-                
-                appData = {
-                    workers: serverData.workers || [],
-                    attendance: serverData.attendance || {},
-                    transactions: serverData.transactions || []
-                };
+            if (!workerId) { window.location.href = 'index.html'; return; }
+            workerIndex = appData.workers.findIndex(w => w.id === workerId);
+            if (workerIndex === -1) { window.location.href = 'index.html'; return; }
 
-                if (!workerId) { window.location.href = 'index.html'; return; }
-                workerIndex = appData.workers.findIndex(w => w.id === workerId);
-                if (workerIndex === -1) { window.location.href = 'index.html'; return; }
+            const w = appData.workers[workerIndex];
+            document.getElementById('dAvatar').innerText = w.name.charAt(0);
+            document.getElementById('dName').innerText = w.name;
+            document.getElementById('dRole').innerText = w.role;
+            document.getElementById('editName').value = w.name;
+            document.getElementById('editRole').value = w.role;
+            document.getElementById('editWage').value = w.wage;
 
-                const w = appData.workers[workerIndex];
-                document.getElementById('dAvatar').innerText = w.name.charAt(0);
-                document.getElementById('dName').innerText = w.name;
-                document.getElementById('dRole').innerText = w.role;
-                document.getElementById('editName').value = w.name;
-                document.getElementById('editRole').value = w.role;
-                document.getElementById('editWage').value = w.wage;
-
-                renderMonthLog();
-            } catch (err) {
-                console.error(err);
-                // Only alert if it's a real connection error, not an auth redirect
-                if(token) alert("Database connection error");
-            }
+            renderMonthLog();
         }
 
         function changeMonth(offset) {
@@ -342,7 +285,6 @@ const API_URL = "https://contractorpro.onrender.com/api";
             
             let countP = 0, countA = 0, countH = 0, totalOT = 0;
             let totalEarned = 0, totalPaid = 0;
-            
             const w = appData.workers[workerIndex];
 
             for (let day = 1; day <= daysInMonth; day++) {
@@ -355,55 +297,23 @@ const API_URL = "https://contractorpro.onrender.com/api";
                 const key = `${isoDate}-${workerId}`;
                 const log = appData.attendance[key] || {}; 
 
-                if (log.status === 'P') {
-                    countP++;
-                    totalEarned += Number(w.wage);
-                    if (log.ot) {
-                        totalOT += Number(log.ot);
-                        totalEarned += (w.wage/8) * Number(log.ot);
-                    }
-                } else if (log.status === 'H') {
-                    countH++;
-                    totalEarned += (w.wage / 2);
-                } else if (log.status === 'A') {
-                    countA++;
-                }
+                if (log.status === 'P') { countP++; totalEarned += Number(w.wage); if(log.ot) { totalOT += Number(log.ot); totalEarned += (w.wage/8)*Number(log.ot); } }
+                else if (log.status === 'H') { countH++; totalEarned += (w.wage / 2); }
+                else if (log.status === 'A') { countA++; }
 
                 if (log.payment) totalPaid += Number(log.payment);
 
-                let statusHtml = '';
-                if (log.status) {
-                    let otTag = log.ot ? `<span class="ot-tag">+${log.ot}h</span>` : '';
-                    let badgeClass = log.status === 'P' ? 'st-p' : (log.status === 'A' ? 'st-a' : 'st-h');
-                    statusHtml = `<div style="display:flex; align-items:center;">${otTag}<div class="status-badge ${badgeClass}" onclick="clearStatus('${isoDate}')">${log.status}</div></div>`;
-                } else {
-                    statusHtml = `
-                        <div class="action-group">
-                            <div class="mini-btn" onclick="setStatus('${isoDate}', 'P')">P</div>
-                            <div class="mini-btn" onclick="setStatus('${isoDate}', 'A')">A</div>
-                            <div class="mini-btn" onclick="setStatus('${isoDate}', 'H')">H</div>
-                            <div class="mini-btn ot-btn" onclick="openOT('${isoDate}')">OT</div>
-                            <div class="mini-btn pay-btn" onclick="openPay('${isoDate}')"><i class="fa-solid fa-money-bill"></i></div>
-                        </div>
-                    `;
-                }
+                let statusHtml = log.status ? 
+                    `<div style="display:flex; align-items:center;">${log.ot ? `<span class="ot-tag">+${log.ot}h</span>` : ''}<div class="status-badge st-${log.status.toLowerCase()}" onclick="clearStatus('${isoDate}')">${log.status}</div></div>` :
+                    `<div class="action-group"><div class="mini-btn" onclick="setStatus('${isoDate}', 'P')">P</div><div class="mini-btn" onclick="setStatus('${isoDate}', 'A')">A</div><div class="mini-btn" onclick="setStatus('${isoDate}', 'H')">H</div><div class="mini-btn ot-btn" onclick="openOT('${isoDate}')">OT</div><div class="mini-btn pay-btn" onclick="openPay('${isoDate}')"><i class="fa-solid fa-money-bill"></i></div></div>`;
 
-                let paymentHtml = '';
-                if (log.payment) {
-                    paymentHtml = `<div class="pay-badge" onclick="openEditPay('${isoDate}', '${log.payment}')">Paid ₹${log.payment}</div>`;
-                } else if(log.status) {
-                    paymentHtml = `<div style="font-size:0.75rem; color:#15803d; cursor:pointer; margin-top:2px;" onclick="openPay('${isoDate}')">+ Pay</div>`;
-                }
+                let paymentHtml = log.payment ? 
+                    `<div class="pay-badge" onclick="openEditPay('${isoDate}', '${log.payment}')">Paid ₹${log.payment}</div>` : 
+                    (log.status ? `<div style="font-size:0.75rem; color:#15803d; cursor:pointer; margin-top:2px;" onclick="openPay('${isoDate}')">+ Pay</div>` : '');
 
                 const row = document.createElement('div');
                 row.className = 'log-row';
-                row.innerHTML = `
-                    <div class="log-date"><span>${dayName}</span>${dayStr}</div>
-                    <div class="log-right">
-                        ${statusHtml}
-                        ${paymentHtml}
-                    </div>
-                `;
+                row.innerHTML = `<div class="log-date"><span>${dayName}</span>${dayStr}</div><div class="log-right">${statusHtml}${paymentHtml}</div>`;
                 list.appendChild(row);
             }
 
@@ -411,22 +321,12 @@ const API_URL = "https://contractorpro.onrender.com/api";
             document.getElementById('cntH').innerText = countH;
             document.getElementById('cntA').innerText = countA;
             document.getElementById('sumOT').innerText = totalOT;
-            
-            document.getElementById('sumEarned').innerText = '₹' + Math.floor(totalEarned).toLocaleString();
-            document.getElementById('sumPaid').innerText = '₹' + Math.floor(totalPaid).toLocaleString();
-            
+            document.getElementById('sumEarned').innerText = '₹' + Math.floor(totalEarned);
+            document.getElementById('sumPaid').innerText = '₹' + Math.floor(totalPaid);
             const balance = totalEarned - totalPaid;
             const balEl = document.getElementById('sumDue');
-            balEl.innerText = '₹' + Math.floor(balance).toLocaleString();
+            balEl.innerText = '₹' + Math.floor(balance);
             balEl.style.color = balance > 0 ? 'var(--red)' : 'var(--green)';
-        }
-
-        async function updateAttendanceDB(date) {
-            const key = `${date}-${workerId}`;
-            await authFetch(`${API_URL}/attendance`, {
-                method: 'POST',
-                body: JSON.stringify({ key, data: appData.attendance[key] })
-            });
         }
 
         async function setStatus(date, status) {
@@ -435,263 +335,187 @@ const API_URL = "https://contractorpro.onrender.com/api";
             appData.attendance[key].status = status;
             if(status !== 'P') delete appData.attendance[key].ot;
             renderMonthLog();
-            await updateAttendanceDB(date);
-        }
-
-        async function clearStatus(date) {
-            // Confirm just in case (Optional, remove if you want it faster)
-            if(!confirm("Clear attendance for this day?")) return;
-
-            const key = `${date}-${workerId}`;
-            
-            // 1. Update Local Data (So UI changes instantly)
-            if (appData.attendance[key]) {
-                delete appData.attendance[key].status;
-                delete appData.attendance[key].ot;
-            }
-            
-            // 2. Update UI
-            renderMonthLog();
-
-            // 3. Tell Server to Delete fields
-            try {
-                await authFetch(`${API_URL}/attendance/delete-status`, {
-                    method: 'POST',
-                    body: JSON.stringify({ key })
-                });
-            } catch (err) {
-                console.error("Failed to clear status on server", err);
-                alert("Server error: Status might come back on refresh.");
-            }
-        }
-        function closeModals() {
-            document.querySelectorAll('.slide-modal-overlay').forEach(el => el.classList.remove('active'));
-            activeDateStr = null;
-        }
-
-        function openOT(date) {
-            activeDateStr = date;
-            document.getElementById('otDateDisplay').innerText = date;
-            document.getElementById('inputOtHours').value = '';
-            document.getElementById('otModal').classList.add('active');
+            await authFetch(`${API_URL}/attendance`, { method: 'POST', body: JSON.stringify({ key, data: appData.attendance[key] }) });
         }
         
+        async function clearStatus(date) {
+            if(!confirm("Clear?")) return;
+            const key = `${date}-${workerId}`;
+            if(appData.attendance[key]) { delete appData.attendance[key].status; delete appData.attendance[key].ot; }
+            renderMonthLog();
+            await authFetch(`${API_URL}/attendance/delete-status`, { method: 'POST', body: JSON.stringify({ key }) });
+        }
+
+        function openOT(date) { activeDateStr = date; document.getElementById('otDateDisplay').innerText = date; document.getElementById('inputOtHours').value = ''; document.getElementById('otModal').classList.add('active'); }
         async function saveOT() {
             const hrs = document.getElementById('inputOtHours').value;
             if(!hrs || !activeDateStr) return;
             const key = `${activeDateStr}-${workerId}`;
-            if (!appData.attendance[key]) appData.attendance[key] = {};
-            appData.attendance[key].status = 'P';
-            appData.attendance[key].ot = hrs;
-            
+            if(!appData.attendance[key]) appData.attendance[key] = {};
+            appData.attendance[key].status = 'P'; appData.attendance[key].ot = hrs;
             closeModals(); renderMonthLog();
-            await updateAttendanceDB(activeDateStr);
+            await authFetch(`${API_URL}/attendance`, { method: 'POST', body: JSON.stringify({ key, data: appData.attendance[key] }) });
         }
 
-        function openPay(date) {
-            activeDateStr = date;
-            document.getElementById('payDateDisplay').innerText = date;
-            document.getElementById('payWorkerDisplay').innerText = appData.workers[workerIndex].name;
-            document.getElementById('inputPayAmount').value = '';
-            document.getElementById('payModal').classList.add('active');
-        }
-
+        function openPay(date) { activeDateStr = date; document.getElementById('payDateDisplay').innerText = date; document.getElementById('payWorkerDisplay').innerText = appData.workers[workerIndex].name; document.getElementById('inputPayAmount').value = ''; document.getElementById('payModal').classList.add('active'); }
+        
+        // --- 1. ADD PAYMENT (Solved) ---
         async function savePayment() {
-            const amountInput = document.getElementById('inputPayAmount').value;
-            // Force it to be a Number
-            const amount = Number(amountInput);
-            
+            const amount = Number(document.getElementById('inputPayAmount').value);
             if(!amount || !activeDateStr) return;
             
+            const w = appData.workers[workerIndex];
             const key = `${activeDateStr}-${workerId}`;
-            if (!appData.attendance[key]) appData.attendance[key] = {};
             
-            // 1. Update Local Data
+            // UI Update
+            if(!appData.attendance[key]) appData.attendance[key] = {};
             appData.attendance[key].payment = amount;
             
-            const w = appData.workers[workerIndex];
-            const txData = { 
-                id: Date.now(), 
-                siteId: w.siteId, 
-                type: 'debit', 
-                amount: amount, 
-                desc: `Payment to ${w.name}`, 
-                date: activeDateStr 
-            };
+            // Transaction Push (Local)
+            const newTx = { id: Date.now(), userId: 0, siteId: w.siteId, workerId: workerId, type: 'debit', amount, desc: `Payment to ${w.name}`, date: activeDateStr };
+            appData.transactions.push(newTx);
             
-            appData.transactions.push(txData);
-            
-            // 2. Update UI
-            closeModals(); 
-            renderMonthLog(); // This ensures it shows up immediately
-
-            // 3. Save to Backend (Attendance)
-            await authFetch(`${API_URL}/attendance`, {
-                method: 'POST',
-                body: JSON.stringify({ key, data: appData.attendance[key] })
-            });
-            
-            // 4. Save to Backend (Transaction)
-            await authFetch(`${API_URL}/transactions`, {
-                method: 'POST',
-                body: JSON.stringify(txData)
-            });
-        }
-
-        function openEditPay(date, amount) {
-            activeDateStr = date;
-            currentEditingPayAmount = amount;
-            document.getElementById('editPayDateDisplay').innerText = date;
-            document.getElementById('inputEditPayAmount').value = amount;
-            document.getElementById('editPayModal').classList.add('active');
-        }
-
-        async function updatePayment() {
-            const newAmount = document.getElementById('inputEditPayAmount').value;
-            if(!newAmount) return;
-            const key = `${activeDateStr}-${workerId}`;
-            if(appData.attendance[key]) appData.attendance[key].payment = newAmount;
             closeModals(); renderMonthLog();
-            await updateAttendanceDB(activeDateStr);
+
+            // CALL NEW ROUTE
+            await authFetch(`${API_URL}/pay/add`, {
+                method: 'POST',
+                body: JSON.stringify({ 
+                    date: activeDateStr, 
+                    workerId: workerId, 
+                    siteId: w.siteId, 
+                    amount: amount, 
+                    name: w.name 
+                })
+            });
         }
-        
-       async function deletePayment() {
-            if(!confirm("Delete this payment badge? (Note: This removes the badge. Please go to Money tab to delete the transaction record.)")) return;
+
+        function openEditPay(date, amount) { activeDateStr = date; document.getElementById('editPayDateDisplay').innerText = date; document.getElementById('inputEditPayAmount').value = amount; document.getElementById('editPayModal').classList.add('active'); }
+
+        // --- 2. UPDATE PAYMENT (Solved) ---
+       // --- 2. UPDATE PAYMENT (Fixed Typo) ---
+        async function updatePayment() {
+            const newAmount = Number(document.getElementById('inputEditPayAmount').value);
+            if(!newAmount) return;
             
             const key = `${activeDateStr}-${workerId}`;
+            // UI Update
+            if(appData.attendance[key]) appData.attendance[key].payment = newAmount;
             
-            // 1. Update Local Data
-            if(appData.attendance[key]) {
-                delete appData.attendance[key].payment;
-            }
-            
-            // 2. Update UI
-            closeModals(); 
-            renderMonthLog();
-            
-            // 3. Update Backend (Special route to remove payment field)
-            await authFetch(`${API_URL}/attendance/delete-payment`, {
+            // Tx Update (Local)
+            const tx = appData.transactions.find(t => t.date === activeDateStr && t.workerId === workerId && t.type === 'debit');
+            if(tx) tx.amount = newAmount;
+
+            closeModals(); renderMonthLog();
+
+            // CALL NEW ROUTE - FIXED 'Amount' to 'amount'
+            await authFetch(`${API_URL}/pay/update`, {
                 method: 'POST',
-                body: JSON.stringify({ key })
+                body: JSON.stringify({ date: activeDateStr, workerId: workerId, amount: newAmount })
+            });
+        }
+
+        // --- 3. DELETE PAYMENT (Solved) ---
+        async function deletePayment() {
+            if(!confirm("Delete this payment? This will also remove the transaction.")) return;
+            const key = `${activeDateStr}-${workerId}`;
+            
+            // UI Update
+            if(appData.attendance[key]) delete appData.attendance[key].payment;
+            appData.transactions = appData.transactions.filter(t => !(t.date === activeDateStr && t.workerId === workerId && t.type === 'debit'));
+
+            closeModals(); renderMonthLog();
+
+            // CALL NEW ROUTE
+            await authFetch(`${API_URL}/pay/delete`, {
+                method: 'POST',
+                body: JSON.stringify({ date: activeDateStr, workerId: workerId })
             });
         }
 
         async function saveSettings() {
-            if (workerIndex > -1) {
-                const w = appData.workers[workerIndex];
-                w.name = document.getElementById('editName').value;
-                w.role = document.getElementById('editRole').value;
-                w.wage = Number(document.getElementById('editWage').value);
-                
-                document.getElementById('dName').innerText = w.name;
-                document.getElementById('dRole').innerText = w.role;
-                alert('Updated'); renderMonthLog(); 
-                
-                // You would need an update endpoint here in server.js to persist this
-                // e.g. await authFetch(`${API_URL}/workers/update`, ...)
-            }
+            // ... (Same as before)
+            const w = appData.workers[workerIndex];
+            w.name = document.getElementById('editName').value;
+            w.role = document.getElementById('editRole').value;
+            w.wage = Number(document.getElementById('editWage').value);
+            alert('Updated locally. Implement backend save if needed.'); 
+            renderMonthLog();
         }
-        // --- REPLACE YOUR shareWhatsapp FUNCTION WITH THIS ---
-// --- REPLACE THE OLD shareWhatsapp FUNCTION WITH THIS ---
-async function shareWhatsapp() {
-    const w = appData.workers[workerIndex];
-    
-    // 1. Fill the Report Card Data
-    document.getElementById('rcName').innerText = w.name;
-    document.getElementById('rcRole').innerText = w.role;
-    document.getElementById('rcMonth').innerText = document.getElementById('displayMonth').innerText;
-    document.getElementById('rcDue').innerText = document.getElementById('sumDue').innerText;
-
-    const list = document.getElementById('rcBody');
-    list.innerHTML = ''; // Clear old rows
-
-    const year = currentMonthDate.getFullYear();
-    const month = currentMonthDate.getMonth();
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-    // 2. Build the Rows
-    for (let day = 1; day <= daysInMonth; day++) {
-        const monthStr = String(month + 1).padStart(2, '0');
-        const dayStr = String(day).padStart(2, '0');
-        const isoDate = `${year}-${monthStr}-${dayStr}`;
-        const dateObj = new Date(year, month, day);
-        const dayName = dateObj.toLocaleDateString('en-US', { weekday: 'short' });
-
-        const key = `${isoDate}-${workerId}`;
-        const log = appData.attendance[key];
-
-        // Only show rows that have data
-        if (log && (log.status || log.payment)) {
-            let statusHtml = log.status ? `<span class="rc-status ${log.status}">${log.status}</span>` : '<span class="rc-status">-</span>';
-            let extraText = [];
-            if(log.ot) extraText.push(`+${log.ot}h OT`);
-            if(log.payment) extraText.push(`Paid ₹${log.payment}`);
-            
-            const row = document.createElement('div');
-            row.className = 'rc-row';
-            row.innerHTML = `
-                <div class="rc-date">${dayStr} ${dayName}</div>
-                ${statusHtml}
-                <div class="rc-extra">${extraText.join(', ')}</div>
-            `;
-            list.appendChild(row);
-        }
-    }
-
-    // 3. Generate Image & Share
-    try {
-        const canvas = await html2canvas(document.getElementById('reportCard'));
         
-        canvas.toBlob(async (blob) => {
-            const file = new File([blob], `Report_${w.name}.png`, { type: "image/png" });
-
-            // Check if browser supports direct file sharing (Mobile mostly)
-            if (navigator.share) {
-                try {
-                    await navigator.share({
-                        files: [file],
-                        title: 'Worker Report',
-                        text: `Attendance Report for ${w.name}`
-                    });
-                } catch (err) {
-                    console.log("Share cancelled or failed", err);
-                }
-            } else {
-                // Fallback for Desktop: Just download it
-                const link = document.createElement('a');
-                link.download = `Report_${w.name}.png`;
-                link.href = canvas.toDataURL();
-                link.click();
-                alert("Image downloaded! You can now send it on WhatsApp.");
+        async function deleteWorker() {
+            if(confirm('Delete Worker and all history?')) {
+                const res = await authFetch(`${API_URL}/workers/${workerId}`, { method: 'DELETE' });
+                if(res && res.ok) window.location.href = 'index.html';
             }
-        });
-    } catch (err) {
-        console.error("Error generating image:", err);
-        alert("Could not generate image.");
-    }
-}
- // --- REPLACE THE OLD deleteWorker FUNCTION WITH THIS ---
-async function deleteWorker() {
-    if (confirm('Permanently delete this worker and all their history? This cannot be undone.')) {
-        try {
-            // 1. Send DELETE request to server
-            const res = await authFetch(`${API_URL}/workers/${workerId}`, {
-                method: 'DELETE'
-            });
-
-            // 2. If successful, go back to home
-            if (res && res.ok) {
-                alert("Worker deleted successfully.");
-                window.location.href = 'index.html';
-            } else {
-                alert("Server failed to delete.");
-            }
-        } catch (e) {
-            console.error(e);
-            alert("Connection error.");
         }
-    }
-}
+
+        function closeModals() { document.querySelectorAll('.slide-modal-overlay').forEach(el => el.classList.remove('active')); }
+
+        // --- FIXED WHATSAPP SHARE FUNCTION ---
+        async function shareWhatsapp() {
+            const w = appData.workers[workerIndex];
+            
+            // 1. Fill Header
+            document.getElementById('rcName').innerText = w.name;
+            document.getElementById('rcRole').innerText = w.role;
+            document.getElementById('rcMonth').innerText = document.getElementById('displayMonth').innerText;
+            
+            // 2. FILL STATS GRID (Problem 1 Solved)
+            document.getElementById('rcP').innerText = document.getElementById('cntP').innerText;
+            document.getElementById('rcH').innerText = document.getElementById('cntH').innerText;
+            document.getElementById('rcA').innerText = document.getElementById('cntA').innerText;
+            document.getElementById('rcOt').innerText = document.getElementById('sumOT').innerText;
+            document.getElementById('rcEarned').innerText = document.getElementById('sumEarned').innerText;
+            document.getElementById('rcPaid').innerText = document.getElementById('sumPaid').innerText;
+            document.getElementById('rcDue').innerText = document.getElementById('sumDue').innerText;
+
+            // 3. Fill List
+            const list = document.getElementById('rcBody');
+            list.innerHTML = ''; 
+            const year = currentMonthDate.getFullYear();
+            const month = currentMonthDate.getMonth();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const monthStr = String(month + 1).padStart(2, '0');
+                const dayStr = String(day).padStart(2, '0');
+                const isoDate = `${year}-${monthStr}-${dayStr}`;
+                const dateObj = new Date(year, month, day);
+                const dayName = dateObj.toLocaleDateString('en-US', { weekday: 'short' });
+                const key = `${isoDate}-${workerId}`;
+                const log = appData.attendance[key];
+
+                if (log && (log.status || log.payment)) {
+                    let statusHtml = log.status ? `<span class="rc-status ${log.status}">${log.status}</span>` : '<span class="rc-status">-</span>';
+                    let extraText = [];
+                    if(log.ot) extraText.push(`+${log.ot}h OT`);
+                    if(log.payment) extraText.push(`Paid ₹${log.payment}`);
+                    
+                    const row = document.createElement('div');
+                    row.className = 'rc-row';
+                    row.innerHTML = `<div class="rc-date">${dayStr} ${dayName}</div>${statusHtml}<div class="rc-extra">${extraText.join(', ')}</div>`;
+                    list.appendChild(row);
+                }
+            }
+
+            // 4. Generate & Share
+            try {
+                const canvas = await html2canvas(document.getElementById('reportCard'));
+                canvas.toBlob(async (blob) => {
+                    const file = new File([blob], `Report_${w.name}.png`, { type: "image/png" });
+                    if (navigator.share) {
+                        try { await navigator.share({ files: [file], title: 'Worker Report' }); } catch (err) {}
+                    } else {
+                        const link = document.createElement('a');
+                        link.download = `Report_${w.name}.png`;
+                        link.href = canvas.toDataURL();
+                        link.click();
+                        alert("Downloaded!");
+                    }
+                });
+            } catch (err) { alert("Error generating image."); }
+        }
 
         init();
     </script>
