@@ -7,6 +7,7 @@
     <title>Contractor Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
@@ -734,6 +735,41 @@
             color: var(--primary);
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
+
+        /* SUBSCRIPTION BADGES */
+        .sub-card {
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .sub-card.pro {
+            background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%);
+            border-color: #FCD34D;
+        }
+
+        .sub-title {
+            font-size: 0.9rem;
+            color: #64748B;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .sub-value {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #0F172A;
+        }
+
+        .sub-days {
+            font-size: 0.8rem;
+            color: #EF4444;
+            font-weight: 700;
+            margin-top: 5px;
+        }
     </style>
 </head>
 
@@ -900,6 +936,7 @@
         <div class="slide-modal-card">
             <h3 class="t-account">My Account</h3>
 
+            <div id="subStatusDisplay"></div>
             <div class="form-group" style="margin-top:20px">
                 <label class="form-label t-language">Language / भाषा</label>
                 <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
@@ -907,12 +944,12 @@
                     <option value="hi">हिंदी (Hindi)</option>
                 </select>
             </div>
-
             <div class="profile-menu-item" style="color:var(--red); margin-top:20px" onclick="logout()">
                 <i class="fa-solid fa-arrow-right-from-bracket"></i>
                 <span class="t-logout">Log Out</span>
             </div>
             <button class="btn-outline t-close" onclick="closeModals()">Close</button>
+
         </div>
     </div>
     <div class="modal-overlay" id="modalEditSite">
@@ -952,8 +989,55 @@
     </div>
 
     <script>
-        const API_URL = "https://contractorpro.onrender.com/api";
-        // const API_URL = "http://localhost:3000/api";
+        // Add these vars to your state at the top of your script
+        let cashfree; // For SDK instance
+        let userSubscription = { isActive: true, type: 'TRIAL' }; // Default safe
+
+
+
+        // THIS SHOULD BE YOUR ONLY INIT FUNCTION
+async function init() {
+    const res = await authFetch(`${API_URL}/data`);
+    if (!res) return;
+    const serverData = await res.json();
+
+    // 1. Handle Language
+    if (serverData.user && serverData.user.lang) {
+        currentLang = serverData.user.lang;
+        document.getElementById('langSelect').value = currentLang;
+    }
+
+    // 2. Setup Data
+    appData = {
+        sites: serverData.sites || [],
+        workers: serverData.workers || [],
+        attendance: serverData.attendance || {},
+        transactions: serverData.transactions || [],
+        currentSiteId: null
+    };
+
+    if (appData.sites.length > 0) {
+        const lastSite = localStorage.getItem('lastSiteId');
+        const exists = appData.sites.find(s => s.id == lastSite);
+        appData.currentSiteId = exists ? exists.id : appData.sites[0].id;
+    }
+
+    // 3. Handle Subscription (CRITICAL PART)
+    if (serverData.user && serverData.user.sub) {
+        userSubscription = serverData.user.sub;
+        console.log("Sub Status:", userSubscription);
+    }
+    
+    // 4. Initialize Cashfree
+    cashfree = Cashfree({ mode: "sandbox" }); 
+
+    // 5. Render Everything
+    renderSubscriptionUI(); // <--- THIS UPDATES THE UI
+    document.getElementById('inputTxDate').valueAsDate = new Date();
+    renderAll();
+}
+        // const API_URL = "https://contractorpro.onrender.com/api";
+        const API_URL = "http://localhost:3000/api";
         // --- TRANSLATION DICTIONARY ---
         const translations = {
             en: {
@@ -1014,36 +1098,6 @@
                 return response;
             } catch (err) { console.error(err); return null; }
         }
-
-        async function init() {
-            const res = await authFetch(`${API_URL}/data`);
-            if (!res) return;
-            const serverData = await res.json();
-
-            // Set Language from Server
-            if (serverData.user && serverData.user.lang) {
-                currentLang = serverData.user.lang;
-                document.getElementById('langSelect').value = currentLang;
-            }
-
-            appData = {
-                sites: serverData.sites || [],
-                workers: serverData.workers || [],
-                attendance: serverData.attendance || {},
-                transactions: serverData.transactions || [],
-                currentSiteId: null
-            };
-
-            if (appData.sites.length > 0) {
-                const lastSite = localStorage.getItem('lastSiteId');
-                const exists = appData.sites.find(s => s.id == lastSite);
-                appData.currentSiteId = exists ? exists.id : appData.sites[0].id;
-            }
-
-            document.getElementById('inputTxDate').valueAsDate = new Date();
-            renderAll();
-        }
-
         // --- LANGUAGE ENGINE ---
         function t(key) {
             return translations[currentLang][key] || key;
@@ -1374,35 +1428,77 @@
         function renderSites() {
             const list = document.getElementById('sitesList');
             list.innerHTML = '';
-            appData.sites.forEach(site => {
+
+            appData.sites.forEach((site, index) => {
                 const isActive = site.id === appData.currentSiteId;
+
+                // LOCK LOGIC: If expired AND index > 0 (only 1st site allowed)
+                const isLocked = !userSubscription.isActive && index > 0;
+
                 const div = document.createElement('div');
                 div.className = `site-card ${isActive ? 'active' : ''}`;
 
-                // Flex container for the card content
-                div.innerHTML = `
-            <div style="display:flex; justify-content:space-between; align-items:start;">
-                <div onclick="selectSite(${site.id})" style="flex-grow:1; cursor:pointer;">
-                    <h3 style="margin:0">${site.name}</h3>
-                    <div class="site-loc" style="color:#64748B; font-size:0.9rem; margin-top:5px;">
-                        <i class="fa-solid fa-location-dot"></i> ${site.loc}
+                // If locked, grey out and prevent click
+                if (isLocked) {
+                    div.style.opacity = '0.5';
+                    div.style.pointerEvents = 'none'; // Disable clicks
+                    div.style.filter = 'grayscale(1)';
+                    div.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h3>${site.name} <i class="fa-solid fa-lock" style="color:var(--red)"></i></h3>
+                    <button onclick="buyPremium()" style="pointer-events:auto; background:var(--primary); color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">Unlock</button>
+                </div>
+            `;
+                } else {
+                    // Normal Site Card Code
+                    div.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:start;">
+                    <div onclick="selectSite(${site.id})" style="flex-grow:1; cursor:pointer;">
+                        <h3 style="margin:0">${site.name}</h3>
+                        <div class="site-loc" style="color:#64748B; font-size:0.9rem; margin-top:5px;">
+                            <i class="fa-solid fa-location-dot"></i> ${site.loc}
+                        </div>
+                    </div>
+                    <div onclick="openEditSite(${site.id})" style="padding:10px; color:var(--primary); cursor:pointer;">
+                        <i class="fa-solid fa-pen-to-square" style="font-size:1.2rem;"></i>
                     </div>
                 </div>
-                <div onclick="openEditSite(${site.id})" style="padding:10px; color:var(--primary); cursor:pointer;">
-                    <i class="fa-solid fa-pen-to-square" style="font-size:1.2rem;"></i>
-                </div>
-            </div>
-        `;
+            `;
+                }
                 list.appendChild(div);
             });
         }
+        async function buyPremium() {
+            // 1. Get Payment Session from Backend
+            const res = await authFetch(`${API_URL}/create-order`, { method: 'POST' });
+            const data = await res.json();
 
-        // Helper to switch site when clicking the text part
-        function selectSite(id) {
-            appData.currentSiteId = id;
-            localStorage.setItem('lastSiteId', id);
-            renderSites();
-            renderHeader();
+            if (data.error) { alert("Error: " + data.error); return; }
+
+            const checkoutOptions = {
+                paymentSessionId: data.payment_session_id,
+                redirectTarget: "_modal", // Open popup instead of redirecting
+            };
+
+            // 2. Open Cashfree Payment
+            cashfree.checkout(checkoutOptions).then(async (result) => {
+                if (result.error) {
+                    alert("Payment Failed or Cancelled");
+                }
+                if (result.paymentDetails) {
+                    // 3. Verify on Backend
+                    const verify = await authFetch(`${API_URL}/verify-payment`, {
+                        method: 'POST',
+                        body: JSON.stringify({ orderId: data.order_id })
+                    });
+                    const vData = await verify.json();
+
+                    if (vData.success) {
+                        alert("Subscription Active! Thank you.");
+                        location.reload();
+                    }
+                }
+            });
         }
 
         function closeModals() {
@@ -1571,9 +1667,63 @@
                 });
             } catch (err) { alert("Error generating report: " + err.message); }
         }
+        function renderSubscriptionUI() {
+            const container = document.getElementById('subStatusDisplay');
+            // Safety check: if container doesn't exist, stop to prevent errors
+            if (!container) return;
+
+            const profileIcon = document.querySelector('.profile-icon');
+
+            // 1. Reset Profile Icon Style
+            if (profileIcon) profileIcon.style.border = 'none';
+
+            if (userSubscription.type === 'PRO') {
+                // --- PRO USER UI ---
+                if (profileIcon) profileIcon.style.border = '2px solid #F59E0B'; // Gold Border
+
+                container.innerHTML = `
+            <div class="sub-card pro">
+                <div class="sub-title">Current Plan</div>
+                <div class="sub-value" style="color:#D97706">👑 Premium Pro</div>
+                <div class="sub-days" style="color:#059669">${userSubscription.daysLeft} Days Left</div>
+            </div>
+        `;
+            } else if (userSubscription.type === 'TRIAL') {
+                // --- TRIAL USER UI ---
+                const isLow = userSubscription.daysLeft <= 5;
+
+                container.innerHTML = `
+            <div class="sub-card">
+                <div class="sub-title">Free Trial</div>
+                <div class="sub-value">${userSubscription.daysLeft} Days Remaining</div>
+                ${isLow ? `<div class="sub-days">Expiring soon! Upgrade now.</div>` : ''}
+                <button onclick="buyPremium()" class="btn-primary" style="margin-top:10px; background:linear-gradient(45deg, #4F46E5, #4338ca);">
+                    Upgrade to Pro (₹99)
+                </button>
+            </div>
+        `;
+            } else {
+                // --- EXPIRED USER UI ---
+                if (profileIcon) profileIcon.style.border = '2px solid #EF4444'; // Red Border
+
+                container.innerHTML = `
+            <div class="sub-card" style="background:#FEF2F2; border-color:#FCA5A5">
+                <div class="sub-title" style="color:#DC2626">Plan Expired</div>
+                <div class="sub-value" style="color:#991B1B">Basic Access</div>
+                <div class="sub-days">Access restricted to 1 Site & 3 Workers</div>
+                <button onclick="buyPremium()" class="btn-primary" style="margin-top:10px; background:#DC2626;">
+                    Unlock Everything (₹99)
+                </button>
+            </div>
+        `;
+            }
+        }
         init();
+
+
+
+
     </script>
 </body>
 
 </html>
-
