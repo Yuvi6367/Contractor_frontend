@@ -701,6 +701,39 @@
             text-align: right;
             width: 100px;
         }
+
+        /* MONEY TOGGLE SWITCH */
+        .money-toggle-wrapper {
+            display: flex;
+            justify-content: center;
+            padding-top: 15px;
+            background: white;
+        }
+
+        .money-toggle {
+            display: flex;
+            background: #F1F5F9;
+            border-radius: 25px;
+            padding: 4px;
+            gap: 5px;
+            border: 1px solid #E2E8F0;
+        }
+
+        .mt-opt {
+            padding: 6px 24px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            color: #94A3B8;
+            transition: all 0.2s;
+        }
+
+        .mt-opt.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
     </style>
 </head>
 
@@ -757,12 +790,25 @@
     </div>
 
     <div id="view-money" class="view-section">
-        <div class="month-nav">
+        <div class="money-toggle-wrapper">
+            <div class="money-toggle">
+                <div class="mt-opt" id="mt-d" onclick="setMoneyMode('day')">D</div>
+                <div class="mt-opt active" id="mt-m" onclick="setMoneyMode('month')">M</div>
+            </div>
+        </div>
+
+        <div id="moneyMonthNav" class="month-nav">
             <button class="nav-arrow" onclick="changeMoneyMonth(-1)"><i class="fa-solid fa-chevron-left"></i></button>
             <span id="moneyMonthDisplay" class="current-month">...</span>
             <button class="nav-arrow" onclick="changeMoneyMonth(1)"><i class="fa-solid fa-chevron-right"></i></button>
-
         </div>
+
+        <div id="moneyDayNav" class="date-nav-container" style="display:none; border-bottom:1px solid #E2E8F0;">
+            <button class="nav-arrow" onclick="changeMoneyDay(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+            <div class="date-strip" id="moneyDateStrip"></div>
+            <button class="nav-arrow" onclick="changeMoneyDay(1)"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+
         <div style="text-align: center; margin: 10px 0;">
             <button onclick="shareMoneyReport()"
                 style="background:none; border:none; color:#25D366; font-weight:600; cursor:pointer; display:inline-flex; align-items:center; gap:8px;">
@@ -931,6 +977,9 @@
         let currentMoneyDate = new Date();
         let editingTxId = null;
         let viewingTxId = null;
+        // --- NEW VARS FOR MONEY TOGGLE ---
+        let moneyViewMode = 'month'; // 'day' or 'month'
+        let moneySelectedDate = new Date().toISOString().split('T')[0]; // Default to today
 
         // Language State
         let currentLang = 'en'; // Default, will update from DB
@@ -1081,7 +1130,7 @@
                 const div = document.createElement('div');
                 div.className = 'worker-card';
                 div.innerHTML = `
-                    <div class="card-header-clickable" onclick="window.location.href='Labour.html?id=${w.id}'">
+                    <div class="card-header-clickable" onclick="window.location.href='labour.html?id=${w.id}'">
                         <div class="card-top">
                             <div class="profile-info">
                                 <div class="avatar">${w.name.charAt(0)}</div>
@@ -1140,43 +1189,109 @@
             currentMoneyDate.setMonth(currentMoneyDate.getMonth() + offset);
             renderMoney();
         }
+        // --- NEW HELPER FUNCTIONS ---
+
+        function setMoneyMode(mode) {
+            moneyViewMode = mode;
+
+            // Toggle UI Styles
+            document.getElementById('mt-d').classList.toggle('active', mode === 'day');
+            document.getElementById('mt-m').classList.toggle('active', mode === 'month');
+
+            // Toggle Nav Visibility
+            document.getElementById('moneyMonthNav').style.display = mode === 'month' ? 'flex' : 'none';
+            document.getElementById('moneyDayNav').style.display = mode === 'day' ? 'flex' : 'none';
+
+            renderMoney();
+        }
+
+        function changeMoneyDay(offset) {
+            const d = new Date(moneySelectedDate);
+            d.setDate(d.getDate() + offset);
+            moneySelectedDate = d.toISOString().split('T')[0];
+            renderMoney();
+        }
+
+        // Logic to render the 3-day strip for Money Tab (similar to Register tab)
+        function renderMoneyDateStrip() {
+            const strip = document.getElementById('moneyDateStrip');
+            strip.innerHTML = '';
+            const currentObj = new Date(moneySelectedDate);
+            const locales = currentLang === 'hi' ? 'hi-IN' : 'en-US';
+
+            for (let i = -1; i <= 1; i++) {
+                const d = new Date(currentObj);
+                d.setDate(currentObj.getDate() + i);
+                const day = d.getDate();
+                const month = d.toLocaleDateString(locales, { month: 'short' });
+                const isSelected = (i === 0);
+
+                const div = document.createElement('div');
+                div.className = `date-item ${isSelected ? 'active' : ''}`;
+                if (!isSelected) div.onclick = () => changeMoneyDay(i);
+                div.innerHTML = `<span style="font-size:0.7rem; font-weight:600">${month}</span><span style="font-size:1.2rem; font-weight:700">${day}</span>`;
+                strip.appendChild(div);
+            }
+        }
+
+        // --- REPLACEMENT RENDER MONEY FUNCTION ---
+
         function renderMoney() {
             const locales = currentLang === 'hi' ? 'hi-IN' : 'en-US';
-            const monthStr = currentMoneyDate.toLocaleDateString(locales, { month: 'long', year: 'numeric' });
-            document.getElementById('moneyMonthDisplay').innerText = monthStr;
+
+            // 1. Render Navigation based on Mode
+            if (moneyViewMode === 'month') {
+                const monthStr = currentMoneyDate.toLocaleDateString(locales, { month: 'long', year: 'numeric' });
+                document.getElementById('moneyMonthDisplay').innerText = monthStr;
+            } else {
+                renderMoneyDateStrip(); // Update the day strip
+            }
 
             const list = document.getElementById('txList');
             list.innerHTML = '';
 
+            // 2. Filter Transactions based on Mode
             const txs = appData.transactions.filter(t => {
                 const tDate = new Date(t.date);
-                return t.siteId === appData.currentSiteId &&
-                    tDate.getMonth() === currentMoneyDate.getMonth() &&
-                    tDate.getFullYear() === currentMoneyDate.getFullYear();
+
+                // Base check: Site ID
+                if (t.siteId !== appData.currentSiteId) return false;
+
+                if (moneyViewMode === 'month') {
+                    // Check Month & Year
+                    return tDate.getMonth() === currentMoneyDate.getMonth() &&
+                        tDate.getFullYear() === currentMoneyDate.getFullYear();
+                } else {
+                    // Check Exact Date (YYYY-MM-DD string comparison)
+                    return t.date === moneySelectedDate;
+                }
             });
 
+            // 3. Calculate Totals & Render List (Same logic as before)
             let totalIn = 0, totalOut = 0;
+
             txs.sort((a, b) => new Date(b.date) - new Date(a.date)).forEach(tx => {
                 if (tx.type === 'credit') totalIn += Number(tx.amount); else totalOut += Number(tx.amount);
+
                 const div = document.createElement('div');
                 div.className = 'tx-card';
                 div.onclick = () => openTxDetail(tx.id);
                 div.innerHTML = `
-                    <div class="tx-left">
-                        <div class="tx-icon ${tx.type === 'credit' ? 'in' : 'out'}"><i class="fa-solid ${tx.type === 'credit' ? 'fa-arrow-down' : 'fa-arrow-up'}"></i></div>
-                        <div class="tx-meta"><h4>${tx.desc}</h4><span>${new Date(tx.date).toLocaleDateString(locales)}</span></div>
-                    </div>
-                    <div class="tx-amount" style="color: ${tx.type === 'credit' ? 'var(--green)' : 'var(--red)'}">${tx.type === 'credit' ? '+' : '-'}₹${tx.amount}</div>
-                `;
+            <div class="tx-left">
+                <div class="tx-icon ${tx.type === 'credit' ? 'in' : 'out'}"><i class="fa-solid ${tx.type === 'credit' ? 'fa-arrow-down' : 'fa-arrow-up'}"></i></div>
+                <div class="tx-meta"><h4>${tx.desc}</h4><span>${new Date(tx.date).toLocaleDateString(locales)}</span></div>
+            </div>
+            <div class="tx-amount" style="color: ${tx.type === 'credit' ? 'var(--green)' : 'var(--red)'}">${tx.type === 'credit' ? '+' : '-'}₹${tx.amount}</div>
+        `;
                 list.appendChild(div);
             });
 
             if (txs.length === 0) list.innerHTML = `<div style="text-align:center; padding:40px; color:#666;">${currentLang === 'hi' ? "कोई लेन-देन नहीं" : "No transactions"}</div>`;
+
             document.getElementById('totalIn').innerText = '₹' + totalIn;
             document.getElementById('totalOut').innerText = '₹' + totalOut;
             document.getElementById('balanceDisplay').innerText = '₹' + (totalIn - totalOut);
         }
-
         // --- MODAL & ACTION HANDLERS ---
         function openTxModal(type) {
             editingTxId = null;
@@ -1363,4 +1478,3 @@
 </body>
 
 </html>
-
