@@ -996,48 +996,48 @@
 
 
         // THIS SHOULD BE YOUR ONLY INIT FUNCTION
-async function init() {
-    const res = await authFetch(`${API_URL}/data`);
-    if (!res) return;
-    const serverData = await res.json();
+        async function init() {
+            const res = await authFetch(`${API_URL}/data`);
+            if (!res) return;
+            const serverData = await res.json();
 
-    // 1. Handle Language
-    if (serverData.user && serverData.user.lang) {
-        currentLang = serverData.user.lang;
-        document.getElementById('langSelect').value = currentLang;
-    }
+            // 1. Handle Language
+            if (serverData.user && serverData.user.lang) {
+                currentLang = serverData.user.lang;
+                document.getElementById('langSelect').value = currentLang;
+            }
 
-    // 2. Setup Data
-    appData = {
-        sites: serverData.sites || [],
-        workers: serverData.workers || [],
-        attendance: serverData.attendance || {},
-        transactions: serverData.transactions || [],
-        currentSiteId: null
-    };
+            // 2. Setup Data
+            appData = {
+                sites: serverData.sites || [],
+                workers: serverData.workers || [],
+                attendance: serverData.attendance || {},
+                transactions: serverData.transactions || [],
+                currentSiteId: null
+            };
 
-    if (appData.sites.length > 0) {
-        const lastSite = localStorage.getItem('lastSiteId');
-        const exists = appData.sites.find(s => s.id == lastSite);
-        appData.currentSiteId = exists ? exists.id : appData.sites[0].id;
-    }
+            if (appData.sites.length > 0) {
+                const lastSite = localStorage.getItem('lastSiteId');
+                const exists = appData.sites.find(s => s.id == lastSite);
+                appData.currentSiteId = exists ? exists.id : appData.sites[0].id;
+            }
 
-    // 3. Handle Subscription (CRITICAL PART)
-    if (serverData.user && serverData.user.sub) {
-        userSubscription = serverData.user.sub;
-        console.log("Sub Status:", userSubscription);
-    }
-    
-    // 4. Initialize Cashfree
-    cashfree = Cashfree({ mode: "sandbox" }); 
+            // 3. Handle Subscription (CRITICAL PART)
+            if (serverData.user && serverData.user.sub) {
+                userSubscription = serverData.user.sub;
+                console.log("Sub Status:", userSubscription);
+            }
 
-    // 5. Render Everything
-    renderSubscriptionUI(); // <--- THIS UPDATES THE UI
-    document.getElementById('inputTxDate').valueAsDate = new Date();
-    renderAll();
-}
-        const API_URL = "https://contractorpro.onrender.com/api";
-        // const API_URL = "http://localhost:3000/api";
+            // 4. Initialize Cashfree
+            cashfree = Cashfree({ mode: "sandbox" });
+
+            // 5. Render Everything
+            renderSubscriptionUI(); // <--- THIS UPDATES THE UI
+            document.getElementById('inputTxDate').valueAsDate = new Date();
+            renderAll();
+        }
+        // const API_URL = "https://contractorpro.onrender.com/api";
+        const API_URL = "http://localhost:3000/api";
         // --- TRANSLATION DICTIONARY ---
         const translations = {
             en: {
@@ -1216,8 +1216,8 @@ async function init() {
                             <div class="pha-opt ${log.status === 'A' ? 'selected a' : ''}" onclick="setAtt(${w.id}, 'A')">A</div>
                         </div>
                         <div style="display:flex; gap:10px">
-                            <input type="number" placeholder="OT" class="modern-input" value="${log.ot}" onchange="updateLog(${w.id}, 'ot', this.value)">
-                            <input type="text" placeholder="${currentLang === 'hi' ? 'नोट' : 'Note'}" class="modern-input" value="${log.note}" onchange="updateLog(${w.id}, 'note', this.value)">
+                            <input type="number" placeholder="OT" class="modern-input" value="${log.ot || ''}" onchange="updateLog(${w.id}, 'ot', this.value)">
+                            <input type="text" placeholder="${currentLang === 'hi' ? 'नोट' : 'Note'}" class="modern-input" value="${log.note || ''}" onchange="updateLog(${w.id}, 'note', this.value)">
                         </div>
                     </div>
                 `;
@@ -1467,6 +1467,22 @@ async function init() {
                 }
                 list.appendChild(div);
             });
+        }
+        // --- MISSING FUNCTION: SELECT SITE ---
+        function selectSite(id) {
+            appData.currentSiteId = id;
+            localStorage.setItem('lastSiteId', id);
+
+            // Update the UI immediately
+            renderSites();
+            renderHeader();
+
+            // Refresh the current view to show data for the new site
+            if (currentTab === 'register') {
+                renderWorkers();
+            } else if (currentTab === 'money') {
+                renderMoney();
+            }
         }
         async function buyPremium() {
             // 1. Get Payment Session from Backend
@@ -1727,4 +1743,3 @@ async function init() {
 </body>
 
 </html>
-
