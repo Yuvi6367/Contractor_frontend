@@ -915,7 +915,23 @@
             <button class="btn-outline t-close" onclick="closeModals()">Close</button>
         </div>
     </div>
-
+    <div class="modal-overlay" id="modalEditSite">
+        <div class="modal-card">
+            <h3>Edit Site</h3>
+            <input type="hidden" id="editSiteId">
+            <div class="form-group">
+                <label class="form-label">Site Name</label>
+                <input type="text" id="inputEditSiteName" class="modern-input">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Location</label>
+                <input type="text" id="inputEditSiteLoc" class="modern-input">
+            </div>
+            <button class="btn-primary" onclick="updateSite()">Update Site</button>
+            <button class="btn-danger" style="margin-top:10px" onclick="deleteSite()">Delete Project</button>
+            <button class="btn-outline" style="margin-top:10px" onclick="closeModals()">Cancel</button>
+        </div>
+    </div>
     <div class="slide-modal-overlay" id="modalTxDetail">
         <div class="slide-modal-card">
             <div class="card-top" style="margin-bottom:15px">
@@ -936,7 +952,7 @@
     </div>
 
     <script>
-        const API_URL = "https://contractorpro.onrender.com/api"; 
+        const API_URL = "https://contractorpro.onrender.com/api";
         // const API_URL = "http://localhost:3000/api";
         // --- TRANSLATION DICTIONARY ---
         const translations = {
@@ -1130,7 +1146,7 @@
                 const div = document.createElement('div');
                 div.className = 'worker-card';
                 div.innerHTML = `
-                    <div class="card-header-clickable" onclick="window.location.href='Labour.html?id=${w.id}'">
+                    <div class="card-header-clickable" onclick="window.location.href='labour.html?id=${w.id}'">
                         <div class="card-top">
                             <div class="profile-info">
                                 <div class="avatar">${w.name.charAt(0)}</div>
@@ -1362,10 +1378,31 @@
                 const isActive = site.id === appData.currentSiteId;
                 const div = document.createElement('div');
                 div.className = `site-card ${isActive ? 'active' : ''}`;
-                div.onclick = () => { appData.currentSiteId = site.id; localStorage.setItem('lastSiteId', site.id); renderSites(); renderHeader(); };
-                div.innerHTML = `<h3 style="margin:0">${site.name}</h3><div class="site-loc"><i class="fa-solid fa-location-dot"></i> ${site.loc}</div>`;
+
+                // Flex container for the card content
+                div.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:start;">
+                <div onclick="selectSite(${site.id})" style="flex-grow:1; cursor:pointer;">
+                    <h3 style="margin:0">${site.name}</h3>
+                    <div class="site-loc" style="color:#64748B; font-size:0.9rem; margin-top:5px;">
+                        <i class="fa-solid fa-location-dot"></i> ${site.loc}
+                    </div>
+                </div>
+                <div onclick="openEditSite(${site.id})" style="padding:10px; color:var(--primary); cursor:pointer;">
+                    <i class="fa-solid fa-pen-to-square" style="font-size:1.2rem;"></i>
+                </div>
+            </div>
+        `;
                 list.appendChild(div);
             });
+        }
+
+        // Helper to switch site when clicking the text part
+        function selectSite(id) {
+            appData.currentSiteId = id;
+            localStorage.setItem('lastSiteId', id);
+            renderSites();
+            renderHeader();
         }
 
         function closeModals() {
@@ -1412,6 +1449,67 @@
             document.getElementById('inputTxDesc').value = tx.desc;
             document.getElementById('inputTxDate').value = tx.date;
             document.getElementById('modalTx').classList.add('active');
+        }
+        // --- SITE ACTIONS ---
+
+        function openEditSite(id) {
+            const site = appData.sites.find(s => s.id === id);
+            if (!site) return;
+
+            document.getElementById('editSiteId').value = site.id;
+            document.getElementById('inputEditSiteName').value = site.name;
+            document.getElementById('inputEditSiteLoc').value = site.loc;
+            document.getElementById('modalEditSite').classList.add('active');
+        }
+
+        async function updateSite() {
+            const id = Number(document.getElementById('editSiteId').value);
+            const name = document.getElementById('inputEditSiteName').value;
+            const loc = document.getElementById('inputEditSiteLoc').value;
+
+            if (!name) return;
+
+            // Update Local Data
+            const site = appData.sites.find(s => s.id === id);
+            if (site) {
+                site.name = name;
+                site.loc = loc;
+            }
+
+            closeModals();
+            renderSites();
+            renderHeader(); // If active site name changed
+
+            // Send to Backend
+            await authFetch(`${API_URL}/sites/update`, {
+                method: 'POST',
+                body: JSON.stringify({ id, name, loc })
+            });
+        }
+
+        async function deleteSite() {
+            const id = Number(document.getElementById('editSiteId').value);
+
+            if (!confirm("Are you sure? This will delete ALL workers, attendance, and money transactions for this site.")) return;
+
+            // Update Local Data
+            appData.sites = appData.sites.filter(s => s.id !== id);
+
+            // If we deleted the active site, switch to another one
+            if (appData.currentSiteId === id) {
+                appData.currentSiteId = appData.sites.length > 0 ? appData.sites[0].id : null;
+                localStorage.setItem('lastSiteId', appData.currentSiteId);
+            }
+
+            closeModals();
+            renderSites();
+            renderHeader();
+
+            // Send to Backend
+            await authFetch(`${API_URL}/sites/delete`, {
+                method: 'POST',
+                body: JSON.stringify({ id })
+            });
         }
         // --- NEW MONEY SHARE FUNCTION ---
         async function shareMoneyReport() {
@@ -1478,4 +1576,3 @@
 </body>
 
 </html>
-
