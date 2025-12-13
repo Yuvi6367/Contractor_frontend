@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -19,123 +20,532 @@
             --orange: #D97706;
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text-main); margin: 0; padding-bottom: 40px; }
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            padding-bottom: 40px;
+        }
 
         /* HEADER */
-        .profile-header { background: white; padding: 20px; border-bottom: 1px solid #E2E8F0; display: flex; align-items: center; gap: 15px; position: sticky; top: 0; z-index: 50; }
-        .back-btn { font-size: 1.2rem; color: var(--text-main); text-decoration: none; padding: 5px 10px 5px 0; }
-        .big-avatar { width: 50px; height: 50px; background: #F1F5F9; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 700; color: var(--text-sub); }
-        .profile-meta h2 { margin: 0; font-size: 1.1rem; }
-        .profile-meta p { margin: 2px 0 0 0; font-size: 0.85rem; color: var(--text-sub); }
+        .profile-header {
+            background: white;
+            padding: 20px;
+            border-bottom: 1px solid #E2E8F0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .back-btn {
+            font-size: 1.2rem;
+            color: var(--text-main);
+            text-decoration: none;
+            padding: 5px 10px 5px 0;
+        }
+
+        .big-avatar {
+            width: 50px;
+            height: 50px;
+            background: #F1F5F9;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-sub);
+        }
+
+        .profile-meta h2 {
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
+        .profile-meta p {
+            margin: 2px 0 0 0;
+            font-size: 0.85rem;
+            color: var(--text-sub);
+        }
 
         /* MONTH NAV */
-        .month-nav { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; background: var(--surface); margin-top: 10px; border-top: 1px solid #E2E8F0; border-bottom: 1px solid #E2E8F0; }
-        .nav-arrow { background: none; border: none; font-size: 1.2rem; color: var(--text-sub); padding: 10px; cursor: pointer; width: 40px; }
-        .current-month { font-weight: 700; font-size: 1rem; background: #F8FAFC; padding: 8px 16px; border-radius: 10px; color: var(--text-main); }
+        .month-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 20px;
+            background: var(--surface);
+            margin-top: 10px;
+            border-top: 1px solid #E2E8F0;
+            border-bottom: 1px solid #E2E8F0;
+        }
+
+        .nav-arrow {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            color: var(--text-sub);
+            padding: 10px;
+            cursor: pointer;
+            width: 40px;
+        }
+
+        .current-month {
+            font-weight: 700;
+            font-size: 1rem;
+            background: #F8FAFC;
+            padding: 8px 16px;
+            border-radius: 10px;
+            color: var(--text-main);
+        }
 
         /* STATS (Horizontally Scrollable) */
-        .stats-container { 
-            overflow-x: auto; 
-            padding: 15px 20px; 
-            display: flex; 
-            gap: 12px; 
+        .stats-container {
+            overflow-x: auto;
+            padding: 15px 20px;
+            display: flex;
+            gap: 12px;
             scrollbar-width: none;
         }
-        .stats-container::-webkit-scrollbar { display: none; }
-        
-        .m-stat-card { 
-            min-width: 85px; 
-            flex-shrink: 0; 
-            background: white; 
-            padding: 12px 10px; 
-            border-radius: 12px; 
-            text-align: center; 
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05); 
+
+        .stats-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .m-stat-card {
+            min-width: 85px;
+            flex-shrink: 0;
+            background: white;
+            padding: 12px 10px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
             border: 1px solid #E2E8F0;
         }
-        .ms-val { font-size: 1.4rem; font-weight: 700; display:block; }
-        .ms-lbl { font-size: 0.75rem; color: #000; font-weight: 700; }        
-        .total-card { border: 2px solid var(--text-main); background: #F8FAFC; min-width: 100px; }
+
+        .ms-val {
+            font-size: 1.4rem;
+            font-weight: 700;
+            display: block;
+        }
+
+        .ms-lbl {
+            font-size: 0.75rem;
+            color: #000;
+            font-weight: 700;
+        }
+
+        .total-card {
+            border: 2px solid var(--text-main);
+            background: #F8FAFC;
+            min-width: 100px;
+        }
 
         /* LOG LIST */
-        .log-list { padding: 0 20px; }
-        .log-row { display: flex; justify-content: space-between; align-items: center; background: white; padding: 8px 15px; border-radius: 12px; margin-bottom: 8px; border: 1px solid #E2E8F0; min-height: 55px; }
-        .log-date { font-size: 1.2rem; display: flex; flex-direction: column; line-height: 1.1; }
-        .log-date span { font-size: 0.8rem; font-weight: 600; color: #475569; }
-        .log-right { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+        .log-list {
+            padding: 0 20px;
+        }
+
+        .log-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 8px 15px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            border: 1px solid #E2E8F0;
+            min-height: 55px;
+        }
+
+        .log-date {
+            font-size: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.1;
+        }
+
+        .log-date span {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #475569;
+        }
+
+        .log-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 5px;
+        }
 
         /* BUTTONS & BADGES */
-        .action-group { display: flex; gap: 6px; }
-        .mini-btn { width: 45px; height: 45px; font-size: 1rem; border: 2px solid #CBD5E1; border-radius: 10px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-weight:600; color: #64748B; background:white; }        
-        .mini-btn.ot-btn { width: auto; padding: 0 12px; background: #EEF2FF; color: var(--primary); border-color: #C7D2FE; }
-        .mini-btn.pay-btn { width: auto; padding: 0 12px; background: #DCFCE7; color: #166534; border-color: #86EFAC; }
-        
-        .status-badge { width: 45px; height: 45px; font-size: 1.1rem; border-width: 2px; border-style:solid; border-radius: 10px; display:flex; align-items:center; justify-content:center; font-weight:700; cursor:pointer;}        
-        .st-p { background: #DCFCE7; color: var(--green); border-color: #bbf7d0; }
-        .st-a { background: #FEE2E2; color: var(--red); border-color: #fecaca; }
-        .st-h { background: #FEF3C7; color: var(--orange); border-color: #fde68a; }
-        
-        .ot-tag { font-size: 0.75rem; background: #EEF2FF; padding: 2px 6px; border-radius: 4px; color: var(--primary); margin-right: 5px; border: 1px solid #C7D2FE; font-weight:600; }
-        .pay-badge { font-size: 0.75rem; font-weight: 600; color: #15803d; background: #f0fdf4; padding: 4px 10px; border-radius: 20px; border: 1px solid #bbf7d0; display: inline-block; cursor: pointer; }
+        .action-group {
+            display: flex;
+            gap: 6px;
+        }
+
+        .mini-btn {
+            width: 45px;
+            height: 45px;
+            font-size: 1rem;
+            border: 2px solid #CBD5E1;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: 600;
+            color: #64748B;
+            background: white;
+        }
+
+        .mini-btn.ot-btn {
+            width: auto;
+            padding: 0 12px;
+            background: #EEF2FF;
+            color: var(--primary);
+            border-color: #C7D2FE;
+        }
+
+        .mini-btn.pay-btn {
+            width: auto;
+            padding: 0 12px;
+            background: #DCFCE7;
+            color: #166534;
+            border-color: #86EFAC;
+        }
+
+        .status-badge {
+            width: 45px;
+            height: 45px;
+            font-size: 1.1rem;
+            border-width: 2px;
+            border-style: solid;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .st-p {
+            background: #DCFCE7;
+            color: var(--green);
+            border-color: #bbf7d0;
+        }
+
+        .st-a {
+            background: #FEE2E2;
+            color: var(--red);
+            border-color: #fecaca;
+        }
+
+        .st-h {
+            background: #FEF3C7;
+            color: var(--orange);
+            border-color: #fde68a;
+        }
+
+        .ot-tag {
+            font-size: 0.75rem;
+            background: #EEF2FF;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--primary);
+            margin-right: 5px;
+            border: 1px solid #C7D2FE;
+            font-weight: 600;
+        }
+
+        .pay-badge {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #15803d;
+            background: #f0fdf4;
+            padding: 4px 10px;
+            border-radius: 20px;
+            border: 1px solid #bbf7d0;
+            display: inline-block;
+            cursor: pointer;
+        }
 
         /* SETTINGS */
-        .settings-section { padding: 20px; margin-top: 20px; background: white; border-top: 1px solid #E2E8F0; }
-        .section-title { font-size: 1rem; font-weight: 700; margin-bottom: 15px; }
-        .form-group { margin-bottom: 15px; }
-        .form-label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 5px; color: var(--text-sub); }
-        .modern-input { width: 100%; background: #F8FAFC; border: 1px solid #E2E8F0; padding: 12px; border-radius: 10px; font-size: 0.95rem; outline: none; }
-        .btn-primary { width: 100%; background: var(--text-main); color: white; padding: 15px; border-radius: 12px; border: none; font-weight: 600; cursor: pointer; }
-        .btn-danger { width: 100%; background: #FEF2F2; color: var(--red); padding: 15px; border-radius: 12px; border: 1px solid #FEE2E2; font-weight: 600; cursor: pointer; margin-top: 15px; }
+        .settings-section {
+            padding: 20px;
+            margin-top: 20px;
+            background: white;
+            border-top: 1px solid #E2E8F0;
+        }
+
+        .section-title {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--text-sub);
+        }
+
+        .modern-input {
+            width: 100%;
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .btn-primary {
+            width: 100%;
+            background: var(--text-main);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-danger {
+            width: 100%;
+            background: #FEF2F2;
+            color: var(--red);
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #FEE2E2;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+        }
 
         /* MODALS */
-        .slide-modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 200; display: none; align-items: flex-end; }
-        .slide-modal-overlay.active { display: flex; }
-        .slide-modal-card { background: white; width: 100%; border-radius: 24px 24px 0 0; padding: 25px; animation: slideUp 0.3s forwards; transform: translateY(100%); }
-        @keyframes slideUp { to { transform: translateY(0); } }
+        .slide-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 200;
+            display: none;
+            align-items: flex-end;
+        }
+
+        .slide-modal-overlay.active {
+            display: flex;
+        }
+
+        .slide-modal-card {
+            background: white;
+            width: 100%;
+            border-radius: 24px 24px 0 0;
+            padding: 25px;
+            animation: slideUp 0.3s forwards;
+            transform: translateY(100%);
+        }
+
+        @keyframes slideUp {
+            to {
+                transform: translateY(0);
+            }
+        }
 
         /* --- UPDATED REPORT CARD DESIGN --- */
         #reportCard {
-            position: fixed; top: 0; left: -9999px;
-            width: 600px; background: white; font-family: 'Inter', sans-serif; color: #1e293b; border: 1px solid #e2e8f0;
+            position: fixed;
+            top: 0;
+            left: -9999px;
+            width: 600px;
+            background: white;
+            font-family: 'Inter', sans-serif;
+            color: #1e293b;
+            border: 1px solid #e2e8f0;
         }
-        .rc-header { background: linear-gradient(135deg, #4F46E5 0%, #818cf8 100%); color: white; padding: 30px; border-radius: 0 0 20px 20px; }
-        .rc-title { font-size: 1.8rem; font-weight: 800; margin: 0; }
-        .rc-subtitle { font-size: 1.1rem; opacity: 0.9; margin-top: 5px; }
-        
-        /* New Stats Grid for WhatsApp */
-        .rc-stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; padding: 20px; background: #F8FAFC; border-bottom: 1px solid #E2E8F0; }
-        .rc-stat-box { text-align: center; background:white; padding:10px; border-radius:10px; border:1px solid #E2E8F0; }
-        .rc-stat-val { font-size: 1.5rem; font-weight: 800; display: block; }
-        .rc-stat-lbl { font-size: 0.8rem; color: #64748B; font-weight: 700; text-transform: uppercase; margin-top:5px; }
 
-        .rc-body { padding: 20px; }
-        .rc-row { display: flex; align-items: center; padding: 12px 15px; border-bottom: 1px solid #f1f5f9; font-size: 1.1rem; }
-        .rc-row:nth-child(even) { background-color: #f8fafc; }
-        .rc-date { width: 30%; font-weight: 600; color: #64748B; }
-        .rc-status { width: 30%; font-weight: 800; }
-        .rc-extra { width: 40%; text-align: right; color: #059669; font-weight: 600; }
-        .rc-status.P { color: #059669; }
-        .rc-status.A { color: #EF4444; }
-        .rc-status.H { color: #D97706; }
-        
-        .rc-footer { background: #1e293b; color: white; padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; font-size: 1.5rem; font-weight: 700; }
+        .rc-header {
+            background: linear-gradient(135deg, #4F46E5 0%, #818cf8 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 0 0 20px 20px;
+        }
+
+        .rc-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        .rc-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        /* New Stats Grid for WhatsApp */
+        .rc-stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            padding: 20px;
+            background: #F8FAFC;
+            border-bottom: 1px solid #E2E8F0;
+        }
+
+        .rc-stat-box {
+            text-align: center;
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #E2E8F0;
+        }
+
+        .rc-stat-val {
+            font-size: 1.5rem;
+            font-weight: 800;
+            display: block;
+        }
+
+        .rc-stat-lbl {
+            font-size: 0.8rem;
+            color: #64748B;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
+
+        .rc-body {
+            padding: 20px;
+        }
+
+        .rc-row {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 1.1rem;
+        }
+
+        .rc-row:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        .rc-date {
+            width: 30%;
+            font-weight: 600;
+            color: #64748B;
+        }
+
+        .rc-status {
+            width: 30%;
+            font-weight: 800;
+        }
+
+        .rc-extra {
+            width: 40%;
+            text-align: right;
+            color: #059669;
+            font-weight: 600;
+        }
+
+        .rc-status.P {
+            color: #059669;
+        }
+
+        .rc-status.A {
+            color: #EF4444;
+        }
+
+        .rc-status.H {
+            color: #D97706;
+        }
+
+        .rc-footer {
+            background: #1e293b;
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        /* PAYMENT MODE TOGGLE */
+        .pay-mode-wrapper {
+            display: flex;
+            background: #F1F5F9;
+            padding: 4px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .pm-opt {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #64748B;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .pm-opt.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        /* ICONS IN LOG */
+        .pay-icon {
+            margin-left: 4px;
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
     </style>
 </head>
+
 <body>
     <div id="reportCard">
         <div class="rc-header">
             <h2 class="rc-title" id="rcName">Worker Name</h2>
             <div class="rc-subtitle"><span id="rcRole">Role</span> • <span id="rcMonth">Month</span></div>
         </div>
-        
+
         <div class="rc-stats-grid">
-            <div class="rc-stat-box"><span class="rc-stat-val" id="rcP" style="color:var(--green)">0</span><span class="rc-stat-lbl">Present</span></div>
-            <div class="rc-stat-box"><span class="rc-stat-val" id="rcH" style="color:var(--orange)">0</span><span class="rc-stat-lbl">Half Day</span></div>
-            <div class="rc-stat-box"><span class="rc-stat-val" id="rcA" style="color:var(--red)">0</span><span class="rc-stat-lbl">Absent</span></div>
-            <div class="rc-stat-box"><span class="rc-stat-val" id="rcOt" style="color:var(--primary)">0</span><span class="rc-stat-lbl">OT Hours</span></div>
-            <div class="rc-stat-box"><span class="rc-stat-val" id="rcEarned" style="color:#0F172A">0</span><span class="rc-stat-lbl">Earned</span></div>
-            <div class="rc-stat-box"><span class="rc-stat-val" id="rcPaid" style="color:#15803d">0</span><span class="rc-stat-lbl">Paid</span></div>
+            <div class="rc-stat-box"><span class="rc-stat-val" id="rcP" style="color:var(--green)">0</span><span
+                    class="rc-stat-lbl">Present</span></div>
+            <div class="rc-stat-box"><span class="rc-stat-val" id="rcH" style="color:var(--orange)">0</span><span
+                    class="rc-stat-lbl">Half Day</span></div>
+            <div class="rc-stat-box"><span class="rc-stat-val" id="rcA" style="color:var(--red)">0</span><span
+                    class="rc-stat-lbl">Absent</span></div>
+            <div class="rc-stat-box"><span class="rc-stat-val" id="rcOt" style="color:var(--primary)">0</span><span
+                    class="rc-stat-lbl">OT Hours</span></div>
+            <div class="rc-stat-box"><span class="rc-stat-val" id="rcEarned" style="color:#0F172A">0</span><span
+                    class="rc-stat-lbl">Earned</span></div>
+            <div class="rc-stat-box"><span class="rc-stat-val" id="rcPaid" style="color:#15803d">0</span><span
+                    class="rc-stat-lbl">Paid</span></div>
         </div>
 
         <div class="rc-body" id="rcBody"></div>
@@ -147,11 +557,15 @@
 
     <div class="profile-header">
         <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
-        <div onclick="shareWhatsapp()" class="back-btn" style="color:#25D366; margin-right:auto; margin-left:10px; cursor:pointer;">
+        <div onclick="shareWhatsapp()" class="back-btn"
+            style="color:#25D366; margin-right:auto; margin-left:10px; cursor:pointer;">
             <i class="fa-brands fa-whatsapp" style="font-size:1.5rem;"></i>
         </div>
         <div class="big-avatar" id="dAvatar"></div>
-        <div class="profile-meta"><h2 id="dName">Loading...</h2><p id="dRole">...</p></div>
+        <div class="profile-meta">
+            <h2 id="dName">Loading...</h2>
+            <p id="dRole">...</p>
+        </div>
     </div>
 
     <div class="month-nav">
@@ -161,22 +575,31 @@
     </div>
 
     <div class="stats-container">
-        <div class="m-stat-card"><span class="ms-val" style="color:var(--green)" id="cntP">0</span><span class="ms-lbl">Present</span></div>
-        <div class="m-stat-card"><span class="ms-val" style="color:var(--orange)" id="cntH">0</span><span class="ms-lbl">Half Day</span></div>
-        <div class="m-stat-card"><span class="ms-val" style="color:var(--red)" id="cntA">0</span><span class="ms-lbl">Absent</span></div>
-        <div class="m-stat-card"><span class="ms-val" style="color:var(--primary)" id="sumOT">0</span><span class="ms-lbl">OT</span></div>
+        <div class="m-stat-card"><span class="ms-val" style="color:var(--green)" id="cntP">0</span><span
+                class="ms-lbl">Present</span></div>
+        <div class="m-stat-card"><span class="ms-val" style="color:var(--orange)" id="cntH">0</span><span
+                class="ms-lbl">Half Day</span></div>
+        <div class="m-stat-card"><span class="ms-val" style="color:var(--red)" id="cntA">0</span><span
+                class="ms-lbl">Absent</span></div>
+        <div class="m-stat-card"><span class="ms-val" style="color:var(--primary)" id="sumOT">0</span><span
+                class="ms-lbl">OT</span></div>
         <div class="m-stat-card"><span class="ms-val" id="sumEarned">₹0</span><span class="ms-lbl">Work</span></div>
-        <div class="m-stat-card"><span class="ms-val" style="color:#15803d" id="sumPaid">₹0</span><span class="ms-lbl">Paid</span></div>
-        <div class="m-stat-card total-card"><span class="ms-val" style="color:var(--red)" id="sumDue">₹0</span><span class="ms-lbl">Total</span></div>
+        <div class="m-stat-card"><span class="ms-val" style="color:#15803d" id="sumPaid">₹0</span><span
+                class="ms-lbl">Paid</span></div>
+        <div class="m-stat-card total-card"><span class="ms-val" style="color:var(--red)" id="sumDue">₹0</span><span
+                class="ms-lbl">Total</span></div>
     </div>
 
     <div class="log-list" id="attendanceList"></div>
 
     <div class="settings-section">
         <div class="section-title">Worker Settings</div>
-        <div class="form-group"><label class="form-label">Name</label><input type="text" id="editName" class="modern-input"></div>
-        <div class="form-group"><label class="form-label">Role</label><input type="text" id="editRole" class="modern-input"></div>
-        <div class="form-group"><label class="form-label">Daily Wage (₹)</label><input type="number" id="editWage" class="modern-input"></div>
+        <div class="form-group"><label class="form-label">Name</label><input type="text" id="editName"
+                class="modern-input"></div>
+        <div class="form-group"><label class="form-label">Role</label><input type="text" id="editRole"
+                class="modern-input"></div>
+        <div class="form-group"><label class="form-label">Daily Wage (₹)</label><input type="number" id="editWage"
+                class="modern-input"></div>
         <button class="btn-primary" onclick="saveSettings()">Save Changes</button>
         <button class="btn-danger" onclick="deleteWorker()">Delete Worker</button>
     </div>
@@ -185,44 +608,59 @@
         <div class="slide-modal-card">
             <h3>Add Overtime</h3>
             <p style="color:var(--text-sub); margin-bottom:20px;">For <span id="otDateDisplay"></span></p>
-            <div class="form-group"><label class="form-label">Hours</label><input type="number" id="inputOtHours" class="modern-input" placeholder="e.g. 2"></div>
+            <div class="form-group"><label class="form-label">Hours</label><input type="number" id="inputOtHours"
+                    class="modern-input" placeholder="e.g. 2"></div>
             <button class="btn-primary" onclick="saveOT()">Save Overtime</button>
-            <button style="width:100%; padding:15px; border:none; background:white; color: #666; margin-top:5px;" onclick="closeModals()">Cancel</button>
+            <button style="width:100%; padding:15px; border:none; background:white; color: #666; margin-top:5px;"
+                onclick="closeModals()">Cancel</button>
         </div>
     </div>
 
     <div class="slide-modal-overlay" id="payModal">
         <div class="slide-modal-card">
             <h3>Make Payment</h3>
-            <p style="color:var(--text-sub); margin-bottom:20px;">To <span id="payWorkerDisplay"></span> on <span id="payDateDisplay"></span></p>
-            <div class="form-group"><label class="form-label">Amount (₹)</label><input type="number" id="inputPayAmount" class="modern-input" placeholder="e.g. 500"></div>
-            <button class="btn-primary" onclick="savePayment()">Confirm Payment</button>
-            <button style="width:100%; padding:15px; border:none; background:white; color: #666; margin-top:5px;" onclick="closeModals()">Cancel</button>
-        </div>
-    </div>
+            <p style="color:var(--text-sub); margin-bottom:20px;">To <span id="payWorkerDisplay"></span> on <span
+                    id="payDateDisplay"></span></p>
 
+            <div class="pay-mode-wrapper">
+                <div class="pm-opt active" id="pm-cash" onclick="setPayMode('cash')">
+                    <i class="fa-solid fa-money-bill"></i> Cash
+                </div>
+                <div class="pm-opt" id="pm-online" onclick="setPayMode('online')">
+                    <i class="fa-solid fa-wifi"></i> Online
+                </div>
+            </div>
+            <div class="form-group"><label class="form-label">Amount (₹)</label><input type="number" id="inputPayAmount"
+                    class="modern-input" placeholder="e.g. 500"></div>
+            <button class="btn-primary" onclick="savePayment()">Confirm Payment</button>
+            <button style="width:100%; padding:15px; border:none; background:white; color: #666; margin-top:5px;"
+                onclick="closeModals()">Cancel</button>
+        </div>
+    </div> ```
     <div class="slide-modal-overlay" id="editPayModal">
         <div class="slide-modal-card">
             <h3>Edit Payment</h3>
             <p style="color:var(--text-sub); margin-bottom:20px;">For <span id="editPayDateDisplay"></span></p>
-            <div class="form-group"><label class="form-label">Amount (₹)</label><input type="number" id="inputEditPayAmount" class="modern-input"></div>
+            <div class="form-group"><label class="form-label">Amount (₹)</label><input type="number"
+                    id="inputEditPayAmount" class="modern-input"></div>
             <button class="btn-primary" onclick="updatePayment()">Update Amount</button>
             <button class="btn-danger" style="margin-top:10px" onclick="deletePayment()">Delete Payment</button>
-            <button style="width:100%; padding:15px; border:none; background:white; color: #666; margin-top:5px;" onclick="closeModals()">Cancel</button>
+            <button style="width:100%; padding:15px; border:none; background:white; color: #666; margin-top:5px;"
+                onclick="closeModals()">Cancel</button>
         </div>
     </div>
 
     <script>
-    const API_URL = "https://contractorpro.onrender.com/api"; 
-        // const API_URL = "http://localhost:3000/api";
-        
+        // const API_URL = "https://contractorpro.onrender.com/api"; 
+        const API_URL = "http://localhost:3000/api";
+
         const token = localStorage.getItem('token');
         if (!token) window.location.href = 'login.html';
 
         const urlParams = new URLSearchParams(window.location.search);
         const workerId = Number(urlParams.get('id'));
-        let appData = null; 
-        let currentMonthDate = new Date(); 
+        let appData = null;
+        let currentMonthDate = new Date();
         let workerIndex = -1;
         let activeDateStr = null;
 
@@ -243,9 +681,9 @@
 
         async function init() {
             const res = await authFetch(`${API_URL}/data`);
-            if(!res) return;
+            if (!res) return;
             const serverData = await res.json();
-            
+
             appData = {
                 workers: serverData.workers || [],
                 attendance: serverData.attendance || {},
@@ -282,7 +720,7 @@
             const year = currentMonthDate.getFullYear();
             const month = currentMonthDate.getMonth();
             const daysInMonth = new Date(year, month + 1, 0).getDate();
-            
+
             let countP = 0, countA = 0, countH = 0, totalOT = 0;
             let totalEarned = 0, totalPaid = 0;
             const w = appData.workers[workerIndex];
@@ -295,20 +733,27 @@
                 const dayName = dateObj.toLocaleDateString('en-US', { weekday: 'short' });
 
                 const key = `${isoDate}-${workerId}`;
-                const log = appData.attendance[key] || {}; 
+                const log = appData.attendance[key] || {};
 
-                if (log.status === 'P') { countP++; totalEarned += Number(w.wage); if(log.ot) { totalOT += Number(log.ot); totalEarned += (w.wage/8)*Number(log.ot); } }
+                if (log.status === 'P') { countP++; totalEarned += Number(w.wage); if (log.ot) { totalOT += Number(log.ot); totalEarned += (w.wage / 8) * Number(log.ot); } }
                 else if (log.status === 'H') { countH++; totalEarned += (w.wage / 2); }
                 else if (log.status === 'A') { countA++; }
 
                 if (log.payment) totalPaid += Number(log.payment);
 
-                let statusHtml = log.status ? 
+                let statusHtml = log.status ?
                     `<div style="display:flex; align-items:center;">${log.ot ? `<span class="ot-tag">+${log.ot}h</span>` : ''}<div class="status-badge st-${log.status.toLowerCase()}" onclick="clearStatus('${isoDate}')">${log.status}</div></div>` :
                     `<div class="action-group"><div class="mini-btn" onclick="setStatus('${isoDate}', 'P')">P</div><div class="mini-btn" onclick="setStatus('${isoDate}', 'A')">A</div><div class="mini-btn" onclick="setStatus('${isoDate}', 'H')">H</div><div class="mini-btn ot-btn" onclick="openOT('${isoDate}')">OT</div><div class="mini-btn pay-btn" onclick="openPay('${isoDate}')"><i class="fa-solid fa-money-bill"></i></div></div>`;
 
-                let paymentHtml = log.payment ? 
-                    `<div class="pay-badge" onclick="openEditPay('${isoDate}', '${log.payment}')">Paid ₹${log.payment}</div>` : 
+                // Determine Icon based on stored mode
+                let modeIcon = '';
+                if (log.paymentMode === 'online') modeIcon = '<i class="fa-solid fa-wifi pay-icon"></i>';
+                else if (log.paymentMode === 'cash') modeIcon = '<i class="fa-solid fa-money-bill pay-icon"></i>';
+
+                let paymentHtml = log.payment ?
+                    `<div class="pay-badge" onclick="openEditPay('${isoDate}', '${log.payment}')">
+        Paid ₹${log.payment} ${modeIcon}
+     </div>` :
                     (log.status ? `<div style="font-size:0.75rem; color:#15803d; cursor:pointer; margin-top:2px;" onclick="openPay('${isoDate}')">+ Pay</div>` : '');
 
                 const row = document.createElement('div');
@@ -329,19 +774,29 @@
             balEl.style.color = balance > 0 ? 'var(--red)' : 'var(--green)';
         }
 
+        // --- NEW STATE VAR ---
+        let currentPayMode = 'cash'; // Default
+
+        function setPayMode(mode) {
+            currentPayMode = mode;
+            // Update UI
+            document.getElementById('pm-cash').classList.toggle('active', mode === 'cash');
+            document.getElementById('pm-online').classList.toggle('active', mode === 'online');
+        }
+
         async function setStatus(date, status) {
             const key = `${date}-${workerId}`;
             if (!appData.attendance[key]) appData.attendance[key] = {};
             appData.attendance[key].status = status;
-            if(status !== 'P') delete appData.attendance[key].ot;
+            if (status !== 'P') delete appData.attendance[key].ot;
             renderMonthLog();
             await authFetch(`${API_URL}/attendance`, { method: 'POST', body: JSON.stringify({ key, data: appData.attendance[key] }) });
         }
-        
+
         async function clearStatus(date) {
-            if(!confirm("Clear?")) return;
+            if (!confirm("Clear?")) return;
             const key = `${date}-${workerId}`;
-            if(appData.attendance[key]) { delete appData.attendance[key].status; delete appData.attendance[key].ot; }
+            if (appData.attendance[key]) { delete appData.attendance[key].status; delete appData.attendance[key].ot; }
             renderMonthLog();
             await authFetch(`${API_URL}/attendance/delete-status`, { method: 'POST', body: JSON.stringify({ key }) });
         }
@@ -349,43 +804,58 @@
         function openOT(date) { activeDateStr = date; document.getElementById('otDateDisplay').innerText = date; document.getElementById('inputOtHours').value = ''; document.getElementById('otModal').classList.add('active'); }
         async function saveOT() {
             const hrs = document.getElementById('inputOtHours').value;
-            if(!hrs || !activeDateStr) return;
+            if (!hrs || !activeDateStr) return;
             const key = `${activeDateStr}-${workerId}`;
-            if(!appData.attendance[key]) appData.attendance[key] = {};
+            if (!appData.attendance[key]) appData.attendance[key] = {};
             appData.attendance[key].status = 'P'; appData.attendance[key].ot = hrs;
             closeModals(); renderMonthLog();
             await authFetch(`${API_URL}/attendance`, { method: 'POST', body: JSON.stringify({ key, data: appData.attendance[key] }) });
         }
 
-        function openPay(date) { activeDateStr = date; document.getElementById('payDateDisplay').innerText = date; document.getElementById('payWorkerDisplay').innerText = appData.workers[workerIndex].name; document.getElementById('inputPayAmount').value = ''; document.getElementById('payModal').classList.add('active'); }
-        
+        // UPDATE: Open Pay Modal (Reset to Cash)
+        function openPay(date) {
+            activeDateStr = date;
+            document.getElementById('payDateDisplay').innerText = date;
+            document.getElementById('payWorkerDisplay').innerText = appData.workers[workerIndex].name;
+            document.getElementById('inputPayAmount').value = '';
+            setPayMode('cash'); // Reset toggle
+            document.getElementById('payModal').classList.add('active');
+        }
+
         // --- 1. ADD PAYMENT (Solved) ---
+        // UPDATE: Save Payment (Send Mode to Server)
         async function savePayment() {
             const amount = Number(document.getElementById('inputPayAmount').value);
-            if(!amount || !activeDateStr) return;
-            
+            if (!amount || !activeDateStr) return;
+
             const w = appData.workers[workerIndex];
             const key = `${activeDateStr}-${workerId}`;
-            
+
             // UI Update
-            if(!appData.attendance[key]) appData.attendance[key] = {};
+            if (!appData.attendance[key]) appData.attendance[key] = {};
             appData.attendance[key].payment = amount;
-            
-            // Transaction Push (Local)
-            const newTx = { id: Date.now(), userId: 0, siteId: w.siteId, workerId: workerId, type: 'debit', amount, desc: `Payment to ${w.name}`, date: activeDateStr };
+            appData.attendance[key].paymentMode = currentPayMode; // Save locally
+
+            // Transaction Push (Local) - Add mode here too
+            const newTx = {
+                id: Date.now(), userId: 0, siteId: w.siteId, workerId: workerId,
+                type: 'debit', amount, desc: `Payment to ${w.name}`, date: activeDateStr,
+                mode: currentPayMode
+            };
             appData.transactions.push(newTx);
-            
+
             closeModals(); renderMonthLog();
 
-            // CALL NEW ROUTE
+            // CALL API with MODE
             await authFetch(`${API_URL}/pay/add`, {
                 method: 'POST',
-                body: JSON.stringify({ 
-                    date: activeDateStr, 
-                    workerId: workerId, 
-                    siteId: w.siteId, 
-                    amount: amount, 
-                    name: w.name 
+                body: JSON.stringify({
+                    date: activeDateStr,
+                    workerId: workerId,
+                    siteId: w.siteId,
+                    amount: amount,
+                    name: w.name,
+                    mode: currentPayMode // <--- Sending Mode
                 })
             });
         }
@@ -393,18 +863,18 @@
         function openEditPay(date, amount) { activeDateStr = date; document.getElementById('editPayDateDisplay').innerText = date; document.getElementById('inputEditPayAmount').value = amount; document.getElementById('editPayModal').classList.add('active'); }
 
         // --- 2. UPDATE PAYMENT (Solved) ---
-       // --- 2. UPDATE PAYMENT (Fixed Typo) ---
+        // --- 2. UPDATE PAYMENT (Fixed Typo) ---
         async function updatePayment() {
             const newAmount = Number(document.getElementById('inputEditPayAmount').value);
-            if(!newAmount) return;
-            
+            if (!newAmount) return;
+
             const key = `${activeDateStr}-${workerId}`;
             // UI Update
-            if(appData.attendance[key]) appData.attendance[key].payment = newAmount;
-            
+            if (appData.attendance[key]) appData.attendance[key].payment = newAmount;
+
             // Tx Update (Local)
             const tx = appData.transactions.find(t => t.date === activeDateStr && t.workerId === workerId && t.type === 'debit');
-            if(tx) tx.amount = newAmount;
+            if (tx) tx.amount = newAmount;
 
             closeModals(); renderMonthLog();
 
@@ -417,11 +887,11 @@
 
         // --- 3. DELETE PAYMENT (Solved) ---
         async function deletePayment() {
-            if(!confirm("Delete this payment? This will also remove the transaction.")) return;
+            if (!confirm("Delete this payment? This will also remove the transaction.")) return;
             const key = `${activeDateStr}-${workerId}`;
-            
+
             // UI Update
-            if(appData.attendance[key]) delete appData.attendance[key].payment;
+            if (appData.attendance[key]) delete appData.attendance[key].payment;
             appData.transactions = appData.transactions.filter(t => !(t.date === activeDateStr && t.workerId === workerId && t.type === 'debit'));
 
             closeModals(); renderMonthLog();
@@ -439,14 +909,14 @@
             w.name = document.getElementById('editName').value;
             w.role = document.getElementById('editRole').value;
             w.wage = Number(document.getElementById('editWage').value);
-            alert('Updated locally. Implement backend save if needed.'); 
+            alert('Updated locally. Implement backend save if needed.');
             renderMonthLog();
         }
-        
+
         async function deleteWorker() {
-            if(confirm('Delete Worker and all history?')) {
+            if (confirm('Delete Worker and all history?')) {
                 const res = await authFetch(`${API_URL}/workers/${workerId}`, { method: 'DELETE' });
-                if(res && res.ok) window.location.href = 'index.html';
+                if (res && res.ok) window.location.href = 'index.html';
             }
         }
 
@@ -455,12 +925,12 @@
         // --- FIXED WHATSAPP SHARE FUNCTION ---
         async function shareWhatsapp() {
             const w = appData.workers[workerIndex];
-            
+
             // 1. Fill Header
             document.getElementById('rcName').innerText = w.name;
             document.getElementById('rcRole').innerText = w.role;
             document.getElementById('rcMonth').innerText = document.getElementById('displayMonth').innerText;
-            
+
             // 2. FILL STATS GRID (Problem 1 Solved)
             document.getElementById('rcP').innerText = document.getElementById('cntP').innerText;
             document.getElementById('rcH').innerText = document.getElementById('cntH').innerText;
@@ -472,7 +942,7 @@
 
             // 3. Fill List
             const list = document.getElementById('rcBody');
-            list.innerHTML = ''; 
+            list.innerHTML = '';
             const year = currentMonthDate.getFullYear();
             const month = currentMonthDate.getMonth();
             const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -489,9 +959,9 @@
                 if (log && (log.status || log.payment)) {
                     let statusHtml = log.status ? `<span class="rc-status ${log.status}">${log.status}</span>` : '<span class="rc-status">-</span>';
                     let extraText = [];
-                    if(log.ot) extraText.push(`+${log.ot}h OT`);
-                    if(log.payment) extraText.push(`Paid ₹${log.payment}`);
-                    
+                    if (log.ot) extraText.push(`+${log.ot}h OT`);
+                    if (log.payment) extraText.push(`Paid ₹${log.payment}`);
+
                     const row = document.createElement('div');
                     row.className = 'rc-row';
                     row.innerHTML = `<div class="rc-date">${dayStr} ${dayName}</div>${statusHtml}<div class="rc-extra">${extraText.join(', ')}</div>`;
@@ -505,7 +975,7 @@
                 canvas.toBlob(async (blob) => {
                     const file = new File([blob], `Report_${w.name}.png`, { type: "image/png" });
                     if (navigator.share) {
-                        try { await navigator.share({ files: [file], title: 'Worker Report' }); } catch (err) {}
+                        try { await navigator.share({ files: [file], title: 'Worker Report' }); } catch (err) { }
                     } else {
                         const link = document.createElement('a');
                         link.download = `Report_${w.name}.png`;
@@ -520,4 +990,5 @@
         init();
     </script>
 </body>
+
 </html>
