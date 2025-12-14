@@ -19,6 +19,19 @@
     }
 </script>
    <style>
+       /* 1. DISALLE TEXT SELECTION EVERYWHERE */
+body {
+    -webkit-user-select: none; /* Safari/Chrome */
+    -moz-user-select: none;    /* Firefox */
+    -ms-user-select: none;     /* IE/Edge */
+    user-select: none;         /* Standard */
+}
+
+/* 2. BUT ALLOW TYPING IN INPUTS (Crucial!) */
+input, textarea {
+    -webkit-user-select: text !important;
+    user-select: text !important;
+}
         body {
             font-family: 'Inter', sans-serif;
             background: #F1F5F9;
@@ -363,4 +376,5 @@
 </body>
 
 </html>
+
 
