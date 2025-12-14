@@ -12,6 +12,15 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <link rel="icon" type="image/png" href="https://i.ibb.co/ycV4FpP2/Contractor-Pro-Icon-01.png">
+    <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#4F46E5">
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('sw.js');
+        });
+    }
+</script>
     <style>
         :root {
             --primary: #4F46E5;
@@ -2169,7 +2178,3 @@
 </body>
 
 </html>
-
-
-
-
