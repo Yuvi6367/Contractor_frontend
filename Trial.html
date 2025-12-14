@@ -1,1 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unlock Pro - Contractor Pro</title>
+    <link rel="icon" type="image/png" href="https://i.ibb.co/PzvZVR0s/Contractor-Pro.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --primary: #4F46E5; --primary-dark: #4338ca; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(135deg, #4F46E5 0%, #818CF8 50%, #C084FC 100%);
+            display: flex; align-items: center; justify-content: center; 
+            min-height: 100vh; margin: 0; padding: 20px; 
+        }
+        .card { 
+            background: rgba(255, 255, 255, 0.95); 
+            backdrop-filter: blur(10px);
+            padding: 40px; border-radius: 30px; 
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); 
+            max-width: 420px; width: 100%; text-align: center; 
+            position: relative; overflow: hidden;
+        }
+        .hero-img {
+            width: 180px; height: auto; margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        h1 { color: #0F172A; font-size: 2rem; font-weight: 800; margin: 10px 0; }
+        .subtitle { color: #64748B; margin-bottom: 30px; font-size: 1.1rem; }
+        .feature-list { text-align: left; margin-bottom: 30px; display: inline-block; }
+        .feature-item { margin-bottom: 12px; color: #334155; display: flex; align-items: center; font-weight: 500; }
+        .feature-icon { color: #10B981; margin-right: 12px; font-size: 1.1rem; }
+        .btn { 
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            color: white; border: none; padding: 18px; width: 100%; 
+            border-radius: 16px; font-size: 1.1rem; font-weight: 700; 
+            cursor: pointer; transition: 0.3s; box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+        }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 15px 20px -3px rgba(79, 70, 229, 0.4); }
+        .badge { 
+            background: linear-gradient(to right, #F59E0B, #D97706);
+            color: white; padding: 8px 16px; border-radius: 30px; 
+            font-weight: 700; font-size: 0.85rem; display: inline-block; 
+            margin-bottom: 15px; box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <img src="https://cdn-icons-png.flaticon.com/512/9662/9662731.png" alt="Success" class="hero-img">
+        <br>
+        <div class="badge">🎉 WELCOME GIFT</div>
+        <h1>Unlock Your Full Potential</h1>
+        <p class="subtitle">Experience the ultimate tool for contractors. 30 days absolutely free.</p>
+        
+        <div class="feature-list">
+            <div class="feature-item"><i class="fa-solid fa-circle-check feature-icon"></i> Unlimited Sites & Projects</div>
+            <div class="feature-item"><i class="fa-solid fa-circle-check feature-icon"></i> Manage Unlimited Workers</div>
+            <div class="feature-item"><i class="fa-solid fa-file-invoice-dollar feature-icon"></i> Full Financial Reports</div>
+        </div>
 
+        <button class="btn" onclick="startTrial()">Claim 30 Days Free <i class="fa-solid fa-arrow-right" style="margin-left:8px"></i></button>
+    </div>
+
+    <script>
+        // IMPORTANT: Change this to your live Render URL when deploying
+        const API_URL = "http://localhost:3000/api"; 
+        const token = localStorage.getItem('token');
+
+        async function startTrial() {
+            if(!token) return window.location.href = 'login.html';
+            const btn = document.querySelector('.btn');
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Activating...';
+            btn.style.opacity = '0.8';
+            
+            try {
+                const res = await fetch(`${API_URL}/start-trial`, {
+                    method: 'POST',
+                    headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' }
+                });
+                const data = await res.json();
+                if(data.success) {
+                    // Add a small delay for effect
+                    setTimeout(() => { window.location.href = 'index.html'; }, 1000);
+                } else {
+                    alert("Error starting trial. Please re-login.");
+                    window.location.href = 'login.html';
+                }
+            } catch(e) { 
+                alert("Network Error. Check connection."); 
+                btn.innerHTML = 'Claim 30 Days Free <i class="fa-solid fa-arrow-right"></i>';
+                btn.style.opacity = '1';
+            }
+        }
+    </script>
+</body>
+</html>
