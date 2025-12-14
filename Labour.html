@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="icon" type="image/png" href="https://i.ibb.co/PzvZVR0s/Contractor-Pro.png">
     <style>
         :root {
             --primary: #4338ca;
@@ -684,6 +685,10 @@
             if (!res) return;
             const serverData = await res.json();
 
+            // 1. Check Subscription
+            const sub = serverData.user.sub || { type: 'TRIAL' };
+            if (sub.type === 'NEW_USER') { window.location.href = 'Trial.html'; return; }
+
             appData = {
                 workers: serverData.workers || [],
                 attendance: serverData.attendance || {},
@@ -695,6 +700,19 @@
             if (workerIndex === -1) { window.location.href = 'index.html'; return; }
 
             const w = appData.workers[workerIndex];
+            const siteWorkers = appData.workers.filter(worker => worker.siteId === w.siteId);
+            const workerRank = siteWorkers.findIndex(worker => worker.id === workerId);
+
+            if (sub.type === 'EXPIRED' && workerRank > 2) {
+                document.body.innerHTML = `
+                    <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; text-align:center; padding:20px;">
+                        <i class="fa-solid fa-lock" style="font-size:3rem; color:#CBD5E1; margin-bottom:20px;"></i>
+                        <h2>Worker Locked</h2>
+                        <p>Your subscription has expired. You can only manage the first 3 workers.</p>
+                        <button onclick="window.location.href='index.html'" style="padding:12px 24px; background:#0F172A; color:white; border:none; border-radius:10px; margin-top:10px;">Go Back</button>
+                    </div>`;
+                return;
+            }
             document.getElementById('dAvatar').innerText = w.name.charAt(0);
             document.getElementById('dName').innerText = w.name;
             document.getElementById('dRole').innerText = w.role;
@@ -752,8 +770,8 @@
 
                 let paymentHtml = log.payment ?
                     `<div class="pay-badge" onclick="openEditPay('${isoDate}', '${log.payment}')">
-        Paid ₹${log.payment} ${modeIcon}
-     </div>` :
+                    Paid ₹${log.payment} ${modeIcon}
+                     </div>` :
                     (log.status ? `<div style="font-size:0.75rem; color:#15803d; cursor:pointer; margin-top:2px;" onclick="openPay('${isoDate}')">+ Pay</div>` : '');
 
                 const row = document.createElement('div');
@@ -924,6 +942,10 @@
 
         // --- FIXED WHATSAPP SHARE FUNCTION ---
         async function shareWhatsapp() {
+            if (window.userSub && window.userSub.type === 'EXPIRED') {
+                alert("Report sharing is locked. Please upgrade.");
+                return;
+            }
             const w = appData.workers[workerIndex];
 
             // 1. Fill Header
@@ -992,4 +1014,3 @@
 </body>
 
 </html>
-
