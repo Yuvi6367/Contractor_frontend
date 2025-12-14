@@ -1,42 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contractor Pro - Login</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <link rel="icon" type="image/png" href="https://i.ibb.co/PzvZVR0s/Contractor-Pro.png">
     <style>
-        body { font-family: 'Inter', sans-serif; background: #F1F5F9; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-        .auth-card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 90%; max-width: 350px; text-align: center; }
-        h2 { margin-top: 0; color: #0F172A; }
-        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #E2E8F0; border-radius: 10px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background: #4F46E5; color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 15px; }
-        button:hover { background: #4338ca; }
-        .toggle-text { margin-top: 15px; font-size: 0.9rem; color: #64748B; cursor: pointer; }
-        .toggle-text span { color: #4F46E5; font-weight: 600; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #F1F5F9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .auth-card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 350px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #0F172A;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #E2E8F0;
+            border-radius: 10px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #4F46E5;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        button:hover {
+            background: #4338ca;
+        }
+
+        .toggle-text {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #64748B;
+            cursor: pointer;
+        }
+
+        .toggle-text span {
+            color: #4F46E5;
+            font-weight: 600;
+        }
+
+        .phone-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .country-select {
+            width: 80px;
+            padding: 12px;
+            border: 1px solid #E2E8F0;
+            border-radius: 10px;
+            background: white;
+        }
+
+        .btn-google {
+            background: white;
+            color: #333;
+            border: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+            position: relative;
+        }
+
+        .btn-google:hover {
+            background: #f8fafc;
+        }
+
+        .or-divider {
+            margin: 20px 0;
+            color: #94A3B8;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
     </style>
 </head>
+
 <body>
 
     <div class="auth-card" id="loginForm">
         <h2>Welcome Back</h2>
-        <input type="text" id="lUser" placeholder="Username">
-        <input type="password" id="lPass" placeholder="Password">
-        <button onclick="login()">Sign In</button>
+
+       <div style="display:flex; gap:10px; margin-bottom:15px; border-bottom:1px solid #E2E8F0; padding-bottom:10px;">
+            <div onclick="showTab('pass')" style="flex:1; cursor:pointer; font-weight:700; color:#4F46E5; border-bottom: 2px solid #4F46E5;" id="tab-pass">
+                Password
+            </div>
+            
+            <div style="flex:1; cursor:not-allowed; color:#CBD5E1; position:relative;" title="Temporarily Unavailable">
+                OTP Login
+                <span style="font-size:0.6rem; background:#EF4444; color:white; padding:2px 4px; border-radius:4px; position:absolute; top:-5px; right:0;">OFF</span>
+            </div>
+        </div>
+
+        <div id="view-pass">
+            <input type="text" id="lUser" placeholder="Username">
+            <input type="password" id="lPass" placeholder="Password">
+            <button onclick="login()">Sign In</button>
+        </div>
+        <div class="or-divider">- OR -</div>
+
+        <button onclick="loginWithGoogle()" class="btn-google">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20">
+            Sign in with Google
+        </button>
+
+        <div id="view-otp" style="display:none">
+            <div id="otp-step-1">
+                <input type="text" id="phoneInput" placeholder="+91 9999999999" value="+91">
+                <div id="recaptcha-container"></div>
+                <button onclick="sendOTP()" id="btn-send" style="background:#059669">Get OTP</button>
+            </div>
+            <div id="otp-step-2" style="display:none">
+                <input type="number" id="otpInput" placeholder="Enter 6-digit OTP">
+                <button onclick="verifyOTP()" style="background:#059669">Verify & Login</button>
+            </div>
+        </div>
+
         <div class="toggle-text" onclick="toggleView()">New here? <span>Create Account</span></div>
     </div>
-
     <div class="auth-card" id="regForm" style="display:none">
         <h2>Create Account</h2>
-        <input type="text" id="rUser" placeholder="Choose Username">
-        <input type="password" id="rPass" placeholder="Choose Password">
-        <button onclick="register()">Sign Up</button>
-        <div class="toggle-text" onclick="toggleView()">Already have account? <span>Sign In</span></div>
+        <input type="text" id="rUser" placeholder="Username">
+        <input type="password" id="rPass" placeholder="Password">
+
+        <div class="phone-group">
+            <select id="rCountry" class="country-select">
+                <option value="+91">+91 (IN)</option>
+                <option value="+1">+1 (US)</option>
+                <option value="+44">+44 (UK)</option>
+            </select>
+            <input type="number" id="rPhone" placeholder="Mobile Number (Optional)">
+        </div>
+
+        <button onclick="register()" style="background:#0F172A">Sign Up</button>
+        <div class="toggle-text" onclick="toggleView()">Already have an account? <span>Login</span></div>
     </div>
 
     <script>
         // REPLACE with your Render URL later
-        const API_URL = "https://contractorpro.onrender.com/api"; 
+        // const API_URL = "https://contractorpro.onrender.com/api"; 
+        const API_URL = "http://localhost:3000/api";
 
         let isLogin = true;
 
@@ -49,7 +186,7 @@
         async function login() {
             const username = document.getElementById('lUser').value;
             const password = document.getElementById('lPass').value;
-            
+
             try {
                 const res = await fetch(`${API_URL}/login`, {
                     method: 'POST',
@@ -57,7 +194,7 @@
                     body: JSON.stringify({ username, password })
                 });
                 const data = await res.json();
-                
+
                 if (data.token) {
                     localStorage.setItem('token', data.token);
                     window.location.href = 'index.html';
@@ -70,15 +207,23 @@
         async function register() {
             const username = document.getElementById('rUser').value;
             const password = document.getElementById('rPass').value;
-            
+            const country = document.getElementById('rCountry').value;
+            const phoneRaw = document.getElementById('rPhone').value;
+
+            // Combine Country + Phone if phone is provided
+            let phone = null;
+            if (phoneRaw) {
+                phone = country + phoneRaw;
+            }
+
             try {
                 const res = await fetch(`${API_URL}/register`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, password })
+                    body: JSON.stringify({ username, password, phone }) // Sending phone
                 });
                 const data = await res.json();
-                
+
                 if (data.success) {
                     alert("Account created! Please log in.");
                     toggleView();
@@ -87,6 +232,125 @@
                 }
             } catch (err) { alert("Server error"); }
         }
+        // --- FIREBASE CONFIG (Get this from Firebase Console) ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyAtsWqNe6GYCqb6AJm833p4iMn49bCQp5o",
+            authDomain: "contractor-pro-93d84.firebaseapp.com",
+            projectId: "contractor-pro-93d84",
+            storageBucket: "contractor-pro-93d84.firebasestorage.app",
+            messagingSenderId: "76561876790",
+            appId: "1:76561876790:web:a2807fd763c6c4c338d597",
+            measurementId: "G-Z87GLC9P0X"
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        // --- OTP LOGIC ---
+        let confirmationResult;
+
+        function showTab(tab) {
+            document.getElementById('view-pass').style.display = tab === 'pass' ? 'block' : 'none';
+            document.getElementById('view-otp').style.display = tab === 'otp' ? 'block' : 'none';
+            document.getElementById('tab-pass').style.color = tab === 'pass' ? '#4F46E5' : '#64748B';
+            document.getElementById('tab-otp').style.color = tab === 'otp' ? '#4F46E5' : '#64748B';
+        }
+
+        function sendOTP() {
+            let phone = document.getElementById('phoneInput').value.trim();
+
+            // 1. FIX: Ensure it starts with + and has no spaces
+            // Remove all non-numeric characters except the leading +
+            if (!phone.startsWith('+')) {
+                // If user forgot +91, add it (assuming India for now, or just alert)
+                phone = "+91" + phone;
+            }
+            // Remove spaces/dashes
+            phone = phone.replace(/[\s-]/g, '');
+
+            // 2. Setup invisible recaptcha
+            if (!window.recaptchaVerifier) {
+                window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', { 'size': 'invisible' });
+            }
+
+            console.log("Sending OTP to:", phone); // Debug log
+
+            firebase.auth().signInWithPhoneNumber(phone, window.recaptchaVerifier)
+                .then((result) => {
+                    confirmationResult = result;
+                    document.getElementById('otp-step-1').style.display = 'none';
+                    document.getElementById('otp-step-2').style.display = 'block';
+                    alert("OTP Sent to " + phone);
+                }).catch((error) => {
+                    console.error(error);
+                    alert("Error: " + error.message);
+                    // Reset captcha so they can try again
+                    if (window.recaptchaVerifier) {
+                        window.recaptchaVerifier.clear();
+                        window.recaptchaVerifier = null;
+                    }
+                });
+        }
+
+        function verifyOTP() {
+            const code = document.getElementById('otpInput').value;
+            confirmationResult.confirm(code).then(async (result) => {
+                // User signed in successfully with Firebase.
+                const phone = result.user.phoneNumber;
+
+                // NOW LOGIN TO YOUR BACKEND
+                try {
+                    const res = await fetch(`${API_URL}/login-phone`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ phone })
+                    });
+                    const data = await res.json();
+
+                    if (data.token) {
+                        localStorage.setItem('token', data.token);
+                        window.location.href = 'index.html';
+                    } else {
+                        alert(data.error || "Phone not linked to any account.");
+                    }
+                } catch (err) { alert("Server Error"); }
+
+            }).catch((error) => { alert("Invalid OTP"); });
+        }
+        // --- GOOGLE LOGIN FUNCTION ---
+        function loginWithGoogle() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            
+            firebase.auth().signInWithPopup(provider)
+                .then(async (result) => {
+                    const user = result.user;
+                    console.log("Google User:", user.email);
+
+                    // Send to Backend
+                    try {
+                        const res = await fetch(`${API_URL}/google-login`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ 
+                                email: user.email, 
+                                googleId: user.uid, 
+                                name: user.displayName 
+                            })
+                        });
+                        const data = await res.json();
+
+                        if (data.token) {
+                            localStorage.setItem('token', data.token);
+                            window.location.href = 'index.html';
+                        } else {
+                            alert("Login failed: " + data.error);
+                        }
+                    } catch (err) { alert("Server Error during Google Login"); }
+
+                }).catch((error) => {
+                    console.error(error);
+                    alert("Google Error: " + error.message);
+                });
+        }
     </script>
 </body>
+
 </html>
