@@ -13,29 +13,34 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <link rel="icon" type="image/png" href="https://i.ibb.co/nNHPRVKx/Contractor-Pro-Icon-01.png">
     <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#4F46E5">
-<script>
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('sw.js');
-        });
-    }
-    
-</script>
+    <meta name="theme-color" content="#4F46E5">
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js');
+            });
+        }
+    </script>
     <style>
         /* 1. DISALLE TEXT SELECTION EVERYWHERE */
-body {
-    -webkit-user-select: none; /* Safari/Chrome */
-    -moz-user-select: none;    /* Firefox */
-    -ms-user-select: none;     /* IE/Edge */
-    user-select: none;         /* Standard */
-}
+        body {
+            -webkit-user-select: none;
+            /* Safari/Chrome */
+            -moz-user-select: none;
+            /* Firefox */
+            -ms-user-select: none;
+            /* IE/Edge */
+            user-select: none;
+            /* Standard */
+        }
 
-/* 2. BUT ALLOW TYPING IN INPUTS (Crucial!) */
-input, textarea {
-    -webkit-user-select: text !important;
-    user-select: text !important;
-}
+        /* 2. BUT ALLOW TYPING IN INPUTS (Crucial!) */
+        input,
+        textarea {
+            -webkit-user-select: text !important;
+            user-select: text !important;
+        }
+
         :root {
             --primary: #4F46E5;
             --bg: #F1F5F9;
@@ -1154,6 +1159,48 @@ input, textarea {
         </div>
         <div class="tx-list" id="txList"></div>
     </div>
+    <div id="view-payroll" class="view-section">
+        <div class="money-toggle-wrapper">
+            <div class="money-toggle">
+                <div class="mt-opt" id="pt-d" onclick="setPayrollMode('day')">D</div>
+                <div class="mt-opt active" id="pt-m" onclick="setPayrollMode('month')">M</div>
+            </div>
+        </div>
+
+        <div id="payrollMonthNav" class="month-nav">
+            <button class="nav-arrow" onclick="changePayrollMonth(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+            <span id="payrollMonthDisplay" class="current-month">...</span>
+            <button class="nav-arrow" onclick="changePayrollMonth(1)"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+
+        <div id="payrollDayNav" class="date-nav-container" style="display:none; border-bottom:1px solid #E2E8F0;">
+            <button class="nav-arrow" onclick="changePayrollDay(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+            <div class="date-strip" id="payrollDateStrip"></div>
+            <button class="nav-arrow" onclick="changePayrollDay(1)"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+
+        <div class="money-summary" style="background: linear-gradient(135deg, #1e293b 0%, #334155 100%);">
+            <div>
+                <span class="balance-label t-pending">Pending Due</span>
+                <div class="balance-amount" id="payrollDueDisplay">₹0</div>
+            </div>
+            <div style="text-align: right;">
+                <div style="font-size: 0.8rem; opacity: 0.9; margin-bottom:4px;">
+                    <span class="t-total-work">Total Work</span>: <span id="payrollTotalWork"
+                        style="font-weight:700; color:#4ade80">₹0</span>
+                </div>
+                <div style="font-size: 0.8rem; opacity: 0.9;">
+                    <span class="t-paid">Paid</span>: <span id="payrollTotalPaid"
+                        style="font-weight:700; color:#f87171">₹0</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="padding: 10px 20px; font-weight:700; color:var(--text-sub); font-size:0.85rem;"
+            class="t-payment-history">PAYMENT HISTORY</div>
+
+        <div class="tx-list" id="payrollList"></div>
+    </div>
 
     <div id="view-sites" class="view-section">
         <div style="padding: 20px;">
@@ -1168,6 +1215,22 @@ input, textarea {
     <nav class="bottom-nav">
         <div class="nav-item active" id="nav-register" onclick="switchTab('register')"><i
                 class="fa-solid fa-clipboard-user"></i><span class="t-nav-reg">Register</span></div>
+        <nav class="bottom-nav">
+            <div class="nav-item active" id="nav-register" onclick="switchTab('register')">
+                <i class="fa-solid fa-clipboard-user"></i><span class="t-nav-reg">Register</span>
+            </div>
+
+            <div class="nav-item" id="nav-payroll" onclick="switchTab('payroll')">
+                <i class="fa-solid fa-users-gear"></i><span class="t-nav-payroll">Payroll</span>
+            </div>
+
+            <div class="nav-item" id="nav-money" onclick="switchTab('money')">
+                <i class="fa-solid fa-wallet"></i><span class="t-nav-money">Money</span>
+            </div>
+            <div class="nav-item" id="nav-sites" onclick="switchTab('sites')">
+                <i class="fa-solid fa-building"></i><span class="t-nav-sites">Sites</span>
+            </div>
+        </nav>
         <div class="nav-item" id="nav-money" onclick="switchTab('money')"><i class="fa-solid fa-wallet"></i><span
                 class="t-nav-money">Money</span></div>
         <div class="nav-item" id="nav-sites" onclick="switchTab('sites')"><i class="fa-solid fa-building"></i><span
@@ -1283,15 +1346,18 @@ input, textarea {
                     </select>
                 </div>
                 <div class="account-section-title" style="margin-top:20px;">Legal & Support</div>
-                
+
                 <div style="background:#F8FAFC; border-radius:12px; border:1px solid #E2E8F0; overflow:hidden;">
-                    <a href="contact.html" class="profile-menu-item" style="padding:12px 15px; text-decoration:none; color:var(--text-main); font-size:0.9rem;">
+                    <a href="contact.html" class="profile-menu-item"
+                        style="padding:12px 15px; text-decoration:none; color:var(--text-main); font-size:0.9rem;">
                         <i class="fa-solid fa-headset"></i> Contact Us
                     </a>
-                    <a href="refund.html" class="profile-menu-item" style="padding:12px 15px; text-decoration:none; color:var(--text-main); font-size:0.9rem;">
+                    <a href="refund.html" class="profile-menu-item"
+                        style="padding:12px 15px; text-decoration:none; color:var(--text-main); font-size:0.9rem;">
                         <i class="fa-solid fa-rotate-left"></i> Refunds & Cancellation
                     </a>
-                    <a href="terms.html" class="profile-menu-item" style="padding:12px 15px; text-decoration:none; color:var(--text-main); font-size:0.9rem; border-bottom:none;">
+                    <a href="terms.html" class="profile-menu-item"
+                        style="padding:12px 15px; text-decoration:none; color:var(--text-main); font-size:0.9rem; border-bottom:none;">
                         <i class="fa-solid fa-scale-balanced"></i> Terms & Conditions
                     </a>
                 </div>
@@ -1324,27 +1390,60 @@ input, textarea {
         </div>
     </div>
     <div class="slide-modal-overlay" id="modalTxDetail">
-        <div class="slide-modal-card">
-            <div class="card-top" style="margin-bottom:15px">
-                <h3 id="detailTxTitle" style="margin:0">Details</h3>
-                <div class="action-icon" onclick="editCurrentTx()"><i class="fa-solid fa-pen"
-                        style="color:var(--primary)"></i></div>
+    <div class="slide-modal-card" style="padding: 0; overflow: hidden;">
+        
+        <div id="txDetailHeader" style="padding: 30px 20px; text-align: center; background: #F8FAFC; border-bottom: 1px solid #F1F5F9;">
+            
+            <div id="txDetailIcon" style="width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin: 0 auto 15px auto; box-shadow: 0 8px 20px rgba(0,0,0,0.06);">
+                </div>
+            
+            <div id="detailTxAmount" style="font-size: 2.5rem; font-weight: 800; color: #0F172A; line-height: 1; margin-bottom: 8px;">
+                </div>
+            
+            <div id="detailTxType" style="font-size: 0.85rem; color: #64748B; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">
+                </div>
+        </div>
+
+        <div style="padding: 25px;">
+            
+            <div style="margin-bottom: 25px;">
+                <label style="display:block; font-size:0.75rem; color:#94A3B8; font-weight:700; margin-bottom:6px; text-transform:uppercase;">Description</label>
+                <div id="detailTxDesc" style="font-size:1.1rem; font-weight:600; color:#334155; line-height:1.4;">
+                    </div>
             </div>
-            <div class="detail-row"><label class="t-date">Date</label><span id="detailTxDate"></span></div>
-            <div class="detail-row"><label class="t-desc">Description</label><span id="detailTxDesc"></span></div>
-            <div class="detail-row" style="border:none"><label class="t-amount">Amount</label><span id="detailTxAmount"
-                    style="font-size:1.5rem"></span></div>
-            <div style="margin-top:20px; display:flex; gap:10px">
-                <button class="btn-danger t-delete" onclick="deleteCurrentTx()">Delete</button>
-                <button class="btn-primary t-close" style="background:white; color:#666; border:1px solid #ccc"
-                    onclick="closeModals()">Close</button>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px;">
+                <div style="background: #F8FAFC; padding: 15px; border-radius: 12px; border: 1px solid #E2E8F0;">
+                    <span style="font-size: 0.75rem; color: #64748B; display: block; margin-bottom: 4px; font-weight:600;">Date</span>
+                    <span id="detailTxDate" style="font-weight: 700; color: #0F172A; font-size: 0.95rem;"></span>
+                </div>
+                <div style="background: #F8FAFC; padding: 15px; border-radius: 12px; border: 1px solid #E2E8F0;">
+                    <span style="font-size: 0.75rem; color: #64748B; display: block; margin-bottom: 4px; font-weight:600;">Mode</span>
+                    <span id="detailTxMode" style="font-weight: 700; color: #0F172A; font-size: 0.95rem;">
+                        <i class="fa-solid fa-money-bill" style="margin-right:5px; color:#94A3B8;"></i> Cash
+                    </span> 
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 12px;">
+                <button onclick="editCurrentTx()" style="flex:1; padding: 14px; border-radius: 12px; border: 1px solid #E2E8F0; background: white; color: #0F172A; font-weight: 600; cursor: pointer; font-size: 0.95rem;">
+                    <i class="fa-solid fa-pen" style="margin-right: 8px; color:#64748B;"></i> Edit
+                </button>
+                <button onclick="deleteCurrentTx()" style="flex:1; padding: 14px; border-radius: 12px; border: 1px solid #FEE2E2; background: #FEF2F2; color: #EF4444; font-weight: 600; cursor: pointer; font-size: 0.95rem;">
+                    <i class="fa-solid fa-trash" style="margin-right: 8px;"></i> Delete
+                </button>
+            </div>
+            
+            <div style="text-align: center; margin-top: 15px; padding-bottom: 10px;">
+                <span onclick="closeModals()" style="font-size: 0.9rem; color: #94A3B8; font-weight: 600; cursor: pointer; padding: 10px;">Close</span>
             </div>
         </div>
     </div>
+</div>
 
     <script>
         // --- CONFIGURATION ---
-        const API_URL = "https://contractorpro.onrender.com/api"; 
+        const API_URL = "https://contractorpro.onrender.com/api";
         // const API_URL = "http://localhost:3000/api";
 
         // --- FIREBASE CONFIG ---
@@ -1375,6 +1474,9 @@ input, textarea {
         let moneySelectedDate = new Date().toISOString().split('T')[0];
         let cashfree;
         let linkConfirmationResult = null; // For Phone Linking
+        let payrollViewMode = 'month';
+        let currentPayrollDate = new Date(); // For month view
+        let payrollSelectedDate = new Date().toISOString().split('T')[0]; // For day view
 
         // --- AUTH FETCH ---
         async function authFetch(url, options = {}) {
@@ -1391,7 +1493,168 @@ input, textarea {
                 return response;
             } catch (err) { console.error(err); return null; }
         }
+        // --- PAYROLL FUNCTIONS (NEW) ---
 
+        function setPayrollMode(mode) {
+            payrollViewMode = mode;
+            // Update Toggle UI
+            document.getElementById('pt-d').classList.toggle('active', mode === 'day');
+            document.getElementById('pt-m').classList.toggle('active', mode === 'month');
+
+            // Toggle Nav Bars
+            document.getElementById('payrollMonthNav').style.display = mode === 'month' ? 'flex' : 'none';
+            document.getElementById('payrollDayNav').style.display = mode === 'day' ? 'flex' : 'none';
+
+            renderPayroll();
+        }
+
+        function changePayrollMonth(offset) {
+            currentPayrollDate.setMonth(currentPayrollDate.getMonth() + offset);
+            renderPayroll();
+        }
+
+        function changePayrollDay(offset) {
+            const d = new Date(payrollSelectedDate);
+            d.setDate(d.getDate() + offset);
+            payrollSelectedDate = d.toISOString().split('T')[0];
+            renderPayroll();
+        }
+
+        function renderPayrollDateStrip() {
+            const strip = document.getElementById('payrollDateStrip');
+            strip.innerHTML = '';
+            const currentObj = new Date(payrollSelectedDate);
+            const locales = currentLang === 'hi' ? 'hi-IN' : 'en-US';
+
+            for (let i = -1; i <= 1; i++) {
+                const d = new Date(currentObj);
+                d.setDate(currentObj.getDate() + i);
+                const day = d.getDate();
+                const month = d.toLocaleDateString(locales, { month: 'short' });
+                const isSelected = (i === 0);
+
+                const div = document.createElement('div');
+                div.className = `date-item ${isSelected ? 'active' : ''}`;
+                if (!isSelected) div.onclick = () => changePayrollDay(i);
+                div.innerHTML = `<span style="font-size:0.7rem; font-weight:600">${month}</span><span style="font-size:1.2rem; font-weight:700">${day}</span>`;
+                strip.appendChild(div);
+            }
+        }
+
+        function renderPayroll() {
+            const locales = currentLang === 'hi' ? 'hi-IN' : 'en-US';
+
+            // 1. Setup Header & Date Logic
+            if (payrollViewMode === 'month') {
+                const monthStr = currentPayrollDate.toLocaleDateString(locales, { month: 'long', year: 'numeric' });
+                document.getElementById('payrollMonthDisplay').innerText = monthStr;
+            } else {
+                renderPayrollDateStrip();
+            }
+
+            // 2. Calculate "Total Work" (Wages) for the period
+            let totalWages = 0;
+            const siteWorkers = appData.workers.filter(w => w.siteId === appData.currentSiteId);
+
+            // Loop through all dates in the selected period to sum wages
+            // Note: This matches the logic in Labour.html but aggregates for ALL workers
+
+            let startDate, endDate;
+            if (payrollViewMode === 'month') {
+                startDate = new Date(currentPayrollDate.getFullYear(), currentPayrollDate.getMonth(), 1);
+                endDate = new Date(currentPayrollDate.getFullYear(), currentPayrollDate.getMonth() + 1, 0);
+            } else {
+                startDate = new Date(payrollSelectedDate);
+                endDate = new Date(payrollSelectedDate);
+            }
+
+            // Iterate days to calculate Total Wages Earned
+            for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+                const isoDate = d.toISOString().split('T')[0];
+
+                siteWorkers.forEach(w => {
+                    const key = `${isoDate}-${w.id}`;
+                    const log = appData.attendance[key];
+
+                    if (log && log.status) {
+                        if (log.status === 'P') {
+                            totalWages += Number(w.wage);
+                            if (log.ot) {
+                                // Assuming OT calculation logic: (Wage / 8) * OT_Hours
+                                totalWages += (w.wage / 8) * Number(log.ot);
+                            }
+                        } else if (log.status === 'H') {
+                            totalWages += (w.wage / 2);
+                        }
+                    }
+                });
+            }
+
+            // 3. Filter Transactions (Payments Only) for the list
+            // Only transactions with a workerId are considered "Labor Payments"
+            const list = document.getElementById('payrollList');
+            list.innerHTML = '';
+
+            const payTxs = appData.transactions.filter(t => {
+                // Must have a workerId to be a payroll transaction
+                if (!t.workerId || t.siteId !== appData.currentSiteId) return false;
+
+                const tDate = new Date(t.date);
+                if (payrollViewMode === 'month') {
+                    return tDate.getMonth() === currentPayrollDate.getMonth() &&
+                        tDate.getFullYear() === currentPayrollDate.getFullYear();
+                } else {
+                    return t.date === payrollSelectedDate;
+                }
+            });
+
+            let totalPaid = 0;
+
+            // 4. Render List
+            payTxs.sort((a, b) => new Date(b.date) - new Date(a.date)).forEach(tx => {
+                totalPaid += Number(tx.amount);
+
+                // Find worker name for display
+                const w = appData.workers.find(worker => worker.id === tx.workerId);
+                const wName = w ? w.name : "Unknown Worker";
+
+                const div = document.createElement('div');
+                div.className = 'tx-card';
+                div.onclick = () => openTxDetail(tx.id); // Reusing existing Tx detail modal
+
+                // Reusing existing CSS classes for styling
+                div.innerHTML = `
+                <div class="tx-left">
+                    <div class="avatar" style="width:40px; height:40px; background:#EEF2FF; color:var(--primary); border-radius:12px;">
+                        ${wName.charAt(0)}
+                    </div>
+                    <div class="tx-meta" style="margin-left:10px;">
+                        <h4 style="margin:0; font-size:0.95rem;">${wName}</h4>
+                        <span style="font-size:0.8rem; color:#64748B;">${new Date(tx.date).toLocaleDateString(locales)} • Payment</span>
+                    </div>
+                </div>
+                <div class="tx-amount" style="color: #f87171; font-weight:700;">-₹${tx.amount}</div>
+            `;
+                list.appendChild(div);
+            });
+
+            if (payTxs.length === 0) {
+                list.innerHTML = `<div style="text-align:center; padding:40px; color:#94A3B8;">${currentLang === 'hi' ? "कोई भुगतान नहीं" : "No payments made"}</div>`;
+            }
+
+            // 5. Update Summary Card
+            const pending = totalWages - totalPaid;
+
+            document.getElementById('payrollTotalWork').innerText = '₹' + Math.floor(totalWages);
+            document.getElementById('payrollTotalPaid').innerText = '₹' + Math.floor(totalPaid);
+
+            const dueEl = document.getElementById('payrollDueDisplay');
+            dueEl.innerText = '₹' + Math.floor(pending);
+
+            // Color logic: If pending is positive (we owe money), show standard text (or red/orange).
+            // If pending is negative (we overpaid), maybe show green.
+            // For simplicity, keeping it standard white/light as per background.
+        }
         // --- INIT FUNCTION ---
         async function init() {
             const res = await authFetch(`${API_URL}/data`);
@@ -1431,7 +1694,7 @@ input, textarea {
                 // NEW: Redirect if they haven't started trial
                 if (userSubscription.type === 'NEW_USER') {
                     window.location.href = 'Trial.html';
-                    return; 
+                    return;
                 }
             }
 
@@ -1570,7 +1833,13 @@ input, textarea {
                 add_worker: "Add Worker", name: "Name", role: "Role", wage: "Wage (₹)",
                 date: "Date", amount: "Amount", desc: "Description",
                 account: "My Account", language: "Language", logout: "Log Out", close: "Close",
-                delete: "Delete"
+                delete: "Delete",
+                nav_payroll: "Payroll",
+                pending: "Pending Due",
+                total_work: "Total Work",
+                paid: "Paid",
+                payment_history: "Payment History",
+
             },
             hi: {
                 pres: "उपस्थित", abs: "अनुपस्थित", cost: "खर्च",
@@ -1582,7 +1851,12 @@ input, textarea {
                 add_worker: "वर्कर जोड़ें", name: "नाम", role: "काम (Role)", wage: "दिहाड़ी (₹)",
                 date: "तारीख", amount: "राशि", desc: "विवरण",
                 account: "मेरा अकाउंट", language: "भाषा", logout: "लॉग आउट", close: "बंद करें",
-                delete: "हटाएं"
+                delete: "हटाएं",
+                nav_payroll: "पेरोल (Payroll)",
+                pending: "बकाया राशि",
+                total_work: "कुल काम",
+                paid: "भुगतान किया",
+                payment_history: "भुगतान इतिहास",
             }
         };
 
@@ -1599,7 +1873,11 @@ input, textarea {
                 't-add-worker': 'add_worker', 't-name': 'name', 't-role': 'role', 't-wage': 'wage',
                 't-date': 'date', 't-amount': 'amount', 't-desc': 'desc',
                 't-account': 'account', 't-language': 'language', 't-logout': 'logout', 't-close': 'close',
-                't-delete': 'delete'
+                't-delete': 'delete', 't-nav-payroll': 'nav_payroll',
+                't-pending': 'pending',
+                't-total-work': 'total_work',
+                't-paid': 'paid',
+                't-payment-history': 'payment_history',
             };
             for (const [cls, key] of Object.entries(map)) {
                 document.querySelectorAll('.' + cls).forEach(el => el.innerText = t(key));
@@ -1611,7 +1889,9 @@ input, textarea {
             renderHeader();
             if (currentTab === 'register') { renderDateStrip(); renderWorkers(); }
             if (currentTab === 'money') { renderMoney(); }
+            if (currentTab === 'payroll') { renderPayroll(); }
             if (currentTab === 'sites') { renderSites(); }
+
         }
 
         // --- CORE RENDERING LOGIC (Same as before) ---
@@ -1934,10 +2214,46 @@ input, textarea {
             viewingTxId = id;
             const tx = appData.transactions.find(t => t.id === id);
             if (!tx) return;
-            document.getElementById('detailTxDate').innerText = new Date(tx.date).toLocaleDateString();
-            document.getElementById('detailTxDesc').innerText = tx.desc;
-            const color = tx.type === 'credit' ? 'var(--green)' : 'var(--red)';
-            document.getElementById('detailTxAmount').innerHTML = `<span style="color:${color}">${tx.type === 'credit' ? '+' : '-'} ₹${tx.amount}</span>`;
+            
+            const locales = currentLang === 'hi' ? 'hi-IN' : 'en-US';
+            
+            // 1. Set Text Data
+            document.getElementById('detailTxDate').innerText = new Date(tx.date).toLocaleDateString(locales, { day: 'numeric', month: 'short', year: 'numeric' });
+            document.getElementById('detailTxDesc').innerText = tx.desc || (currentLang === 'hi' ? 'कोई विवरण नहीं' : 'No description provided');
+            document.getElementById('detailTxAmount').innerText = `₹${tx.amount}`;
+            
+            // 2. Visual Logic (Colors & Icons)
+            const iconEl = document.getElementById('txDetailIcon');
+            const typeLabel = document.getElementById('detailTxType');
+            const amtEl = document.getElementById('detailTxAmount');
+            
+            if (tx.type === 'credit') {
+                // INCOME STYLING
+                iconEl.style.background = '#DCFCE7'; // Light Green
+                iconEl.style.color = '#166534';      // Dark Green
+                iconEl.innerHTML = '<i class="fa-solid fa-arrow-down"></i>';
+                
+                amtEl.style.color = '#166534';
+                typeLabel.innerText = currentLang === 'hi' ? 'प्राप्त हुआ (Received)' : 'Payment Received';
+            } else {
+                // EXPENSE STYLING
+                iconEl.style.background = '#FEE2E2'; // Light Red
+                iconEl.style.color = '#DC2626';      // Dark Red
+                iconEl.innerHTML = '<i class="fa-solid fa-arrow-up"></i>';
+                
+                amtEl.style.color = '#DC2626';
+                typeLabel.innerText = currentLang === 'hi' ? 'खर्च (Expense)' : 'Expense Paid';
+            }
+
+            // 3. Payment Mode Logic
+            const modeEl = document.getElementById('detailTxMode');
+            if (tx.mode === 'online') {
+                modeEl.innerHTML = '<i class="fa-solid fa-wifi" style="margin-right:5px; color:#3B82F6;"></i> Online';
+            } else {
+                modeEl.innerHTML = '<i class="fa-solid fa-money-bill" style="margin-right:5px; color:#10B981;"></i> Cash';
+            }
+
+            // 4. Open Modal
             document.getElementById('modalTxDetail').classList.add('active');
         }
         function editCurrentTx() {
@@ -1970,7 +2286,7 @@ input, textarea {
         function renderSites() {
             const list = document.getElementById('sitesList');
             list.innerHTML = '';
-            
+
             appData.sites.forEach((site, index) => {
                 const isActive = site.id === appData.currentSiteId;
                 // LOCK if Expired AND not the first site (Index 0)
@@ -1978,7 +2294,7 @@ input, textarea {
 
                 const div = document.createElement('div');
                 div.className = `site-card ${isActive ? 'active' : ''}`;
-                
+
                 if (isLocked) {
                     // LOCKED UI
                     div.style.background = '#F8FAFC';
@@ -2050,18 +2366,18 @@ input, textarea {
         function renderSubscriptionUI() {
             const container = document.getElementById('subStatusDisplay');
             // Select the profile icon in the header
-            const profileIcon = document.querySelector('.profile-icon'); 
-            
+            const profileIcon = document.querySelector('.profile-icon');
+
             // 1. RESET STYLES (Clear previous state)
             if (profileIcon) {
                 profileIcon.classList.remove('pro-glow');
                 profileIcon.style.border = 'none';
                 profileIcon.style.background = '#F1F5F9';
                 profileIcon.style.color = '#64748B';
-                
+
                 // Remove existing crown if present
                 const existingBadge = profileIcon.querySelector('.pro-crown-badge');
-                if(existingBadge) existingBadge.remove();
+                if (existingBadge) existingBadge.remove();
             }
 
             if (!container) return;
@@ -2071,7 +2387,7 @@ input, textarea {
                 // --- NEW PRO VISUALS ---
                 if (profileIcon) {
                     profileIcon.classList.add('pro-glow');
-                    
+
                     // Create and append the crown badge
                     const badge = document.createElement('div');
                     badge.className = 'pro-crown-badge';
@@ -2088,7 +2404,7 @@ input, textarea {
                         </div>
                         <div class="sub-days" style="color:#059669">${userSubscription.daysLeft} Days Left</div>
                     </div>`;
-            } 
+            }
             else if (userSubscription.type === 'TRIAL') {
                 // Trial Visuals
                 const isLow = userSubscription.daysLeft <= 5;
@@ -2099,7 +2415,7 @@ input, textarea {
                         ${isLow ? `<div class="sub-days">Expiring soon! Upgrade now.</div>` : ''}
                         <button onclick="buyPremium()" class="btn-primary" style="margin-top:10px; background:linear-gradient(45deg, #4F46E5, #4338ca);">Upgrade to Pro (₹49)</button>
                     </div>`;
-            } 
+            }
             else {
                 // Expired Visuals
                 if (profileIcon) {
@@ -2135,7 +2451,7 @@ input, textarea {
         async function shareMoneyReport() {
             // LOCK REPORT
             if (userSubscription.type === 'EXPIRED') {
-                if(confirm("Reports are locked. Upgrade to Pro to unlock sharing?")) {
+                if (confirm("Reports are locked. Upgrade to Pro to unlock sharing?")) {
                     buyPremium();
                 }
                 return;
@@ -2192,6 +2508,3 @@ input, textarea {
 </body>
 
 </html>
-
-
-
