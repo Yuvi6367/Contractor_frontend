@@ -1114,23 +1114,38 @@
     </div>
 
     <div id="view-money" class="view-section">
-        <div class="money-toggle-wrapper">
+        <div class="money-toggle-wrapper" style="position: relative; justify-content: center;">
             <div class="money-toggle">
                 <div class="mt-opt" id="mt-d" onclick="setMoneyMode('day')">D</div>
                 <div class="mt-opt active" id="mt-m" onclick="setMoneyMode('month')">M</div>
             </div>
+            <button onclick="openMoneyFilter()"
+                style="position: absolute; right: 20px; top: 15px; background: white; border: 1px solid #E2E8F0; width: 36px; height: 36px; border-radius: 10px; color: #64748B; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                <i class="fa-solid fa-filter" id="moneyFilterIcon"></i>
+            </button>
         </div>
 
-        <div id="moneyMonthNav" class="month-nav">
-            <button class="nav-arrow" onclick="changeMoneyMonth(-1)"><i class="fa-solid fa-chevron-left"></i></button>
-            <span id="moneyMonthDisplay" class="current-month">...</span>
-            <button class="nav-arrow" onclick="changeMoneyMonth(1)"><i class="fa-solid fa-chevron-right"></i></button>
+        <div id="moneyNavContainer">
+            <div id="moneyMonthNav" class="month-nav">
+                <button class="nav-arrow" onclick="changeMoneyMonth(-1)"><i
+                        class="fa-solid fa-chevron-left"></i></button>
+                <span id="moneyMonthDisplay" class="current-month">...</span>
+                <button class="nav-arrow" onclick="changeMoneyMonth(1)"><i
+                        class="fa-solid fa-chevron-right"></i></button>
+            </div>
+
+            <div id="moneyDayNav" class="date-nav-container" style="display:none; border-bottom:1px solid #E2E8F0;">
+                <button class="nav-arrow" onclick="changeMoneyDay(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+                <div class="date-strip" id="moneyDateStrip"></div>
+                <button class="nav-arrow" onclick="changeMoneyDay(1)"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
         </div>
 
-        <div id="moneyDayNav" class="date-nav-container" style="display:none; border-bottom:1px solid #E2E8F0;">
-            <button class="nav-arrow" onclick="changeMoneyDay(-1)"><i class="fa-solid fa-chevron-left"></i></button>
-            <div class="date-strip" id="moneyDateStrip"></div>
-            <button class="nav-arrow" onclick="changeMoneyDay(1)"><i class="fa-solid fa-chevron-right"></i></button>
+        <div id="moneyCustomRangeDisplay"
+            style="display:none; padding: 10px; text-align: center; font-size: 0.85rem; background: #FFFBEB; color: #D97706; font-weight: 600; border-bottom: 1px solid #FEF3C7;">
+            <i class="fa-solid fa-calendar-days"></i> <span id="moneyRangeText"></span>
+            <span onclick="clearMoneyFilter()"
+                style="margin-left: 10px; text-decoration: underline; cursor: pointer; color: #B45309;">Clear</span>
         </div>
 
         <div style="text-align: center; margin: 10px 0;">
@@ -1139,32 +1154,56 @@
                 <i class="fa-brands fa-whatsapp" style="font-size:1.4rem;"></i> Share Report
             </button>
         </div>
-        <div class="money-summary">
+
+        <div class="money-summary" style="background: linear-gradient(135deg, #1e293b 0%, #334155 100%);">
             <div>
-                <span class="balance-label t-month-bal">Month Balance</span>
+                <span class="balance-label t-month-bal" style="opacity: 0.8;">Balance</span>
                 <div class="balance-amount" id="balanceDisplay">₹0</div>
             </div>
             <div style="text-align: right;">
-                <div style="font-size: 0.8rem; opacity: 0.8;"><span class="t-in">In</span>: <span id="totalIn">₹0</span>
+                <div style="font-size: 0.85rem; margin-bottom: 4px;">
+                    <span class="t-in" style="opacity:0.8">In</span>: <span id="totalIn"
+                        style="font-weight:700; color:#4ade80">₹0</span>
                 </div>
-                <div style="font-size: 0.8rem; opacity: 0.8;"><span class="t-out">Out</span>: <span
-                        id="totalOut">₹0</span></div>
+                <div style="font-size: 0.85rem;">
+                    <span class="t-out" style="opacity:0.8">Out</span>: <span id="totalOut"
+                        style="font-weight:700; color:#f87171">₹0</span>
+                </div>
             </div>
         </div>
+
         <div class="money-actions">
             <button class="action-btn btn-in" onclick="openTxModal('credit')"><i class="fa-solid fa-arrow-down"></i>
                 <span class="t-received">Received</span></button>
             <button class="action-btn btn-out" onclick="openTxModal('debit')"><i class="fa-solid fa-arrow-up"></i> <span
                     class="t-expense">Expense</span></button>
         </div>
+
+        <div style="padding: 10px 20px; font-weight:700; color:var(--text-sub); font-size:0.85rem;"
+            class="t-payment-history">TRANSACTION HISTORY</div>
+
         <div class="tx-list" id="txList"></div>
     </div>
     <div id="view-payroll" class="view-section">
-        <div class="money-toggle-wrapper">
+        <div class="money-toggle-wrapper" style="position: relative; justify-content: center;">
             <div class="money-toggle">
                 <div class="mt-opt" id="pt-d" onclick="setPayrollMode('day')">D</div>
                 <div class="mt-opt active" id="pt-m" onclick="setPayrollMode('month')">M</div>
             </div>
+            <button onclick="openPayrollFilter()"
+                style="position: absolute; right: 20px; top: 15px; background: white; border: 1px solid #E2E8F0; width: 36px; height: 36px; border-radius: 10px; color: #64748B; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                <i class="fa-solid fa-filter" id="payrollFilterIcon"></i>
+            </button>
+        </div>
+
+        <div id="payrollCustomRangeDisplay"
+            style="display:none; padding: 10px; text-align: center; font-size: 0.85rem; background: #FFFBEB; color: #D97706; font-weight: 600; border-bottom: 1px solid #FEF3C7;">
+            <i class="fa-solid fa-calendar-days"></i> <span id="payrollRangeText"></span>
+            <span onclick="clearPayrollFilter()"
+                style="margin-left: 10px; text-decoration: underline; cursor: pointer; color: #B45309;">Clear</span>
+        </div>
+
+        <div id="payrollNavContainer">
         </div>
 
         <div id="payrollMonthNav" class="month-nav">
@@ -1390,56 +1429,136 @@
         </div>
     </div>
     <div class="slide-modal-overlay" id="modalTxDetail">
-    <div class="slide-modal-card" style="padding: 0; overflow: hidden;">
-        
-        <div id="txDetailHeader" style="padding: 30px 20px; text-align: center; background: #F8FAFC; border-bottom: 1px solid #F1F5F9;">
-            
-            <div id="txDetailIcon" style="width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin: 0 auto 15px auto; box-shadow: 0 8px 20px rgba(0,0,0,0.06);">
-                </div>
-            
-            <div id="detailTxAmount" style="font-size: 2.5rem; font-weight: 800; color: #0F172A; line-height: 1; margin-bottom: 8px;">
-                </div>
-            
-            <div id="detailTxType" style="font-size: 0.85rem; color: #64748B; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">
-                </div>
-        </div>
+        <div class="slide-modal-card" style="padding: 0; overflow: hidden;">
 
-        <div style="padding: 25px;">
-            
-            <div style="margin-bottom: 25px;">
-                <label style="display:block; font-size:0.75rem; color:#94A3B8; font-weight:700; margin-bottom:6px; text-transform:uppercase;">Description</label>
-                <div id="detailTxDesc" style="font-size:1.1rem; font-weight:600; color:#334155; line-height:1.4;">
+            <div id="txDetailHeader"
+                style="padding: 30px 20px; text-align: center; background: #F8FAFC; border-bottom: 1px solid #F1F5F9;">
+
+                <div id="txDetailIcon"
+                    style="width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin: 0 auto 15px auto; box-shadow: 0 8px 20px rgba(0,0,0,0.06);">
+                </div>
+
+                <div id="detailTxAmount"
+                    style="font-size: 2.5rem; font-weight: 800; color: #0F172A; line-height: 1; margin-bottom: 8px;">
+                </div>
+
+                <div id="detailTxType"
+                    style="font-size: 0.85rem; color: #64748B; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">
+                </div>
+            </div>
+
+            <div style="padding: 25px;">
+
+                <div style="margin-bottom: 25px;">
+                    <label
+                        style="display:block; font-size:0.75rem; color:#94A3B8; font-weight:700; margin-bottom:6px; text-transform:uppercase;">Description</label>
+                    <div id="detailTxDesc" style="font-size:1.1rem; font-weight:600; color:#334155; line-height:1.4;">
                     </div>
-            </div>
-
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px;">
-                <div style="background: #F8FAFC; padding: 15px; border-radius: 12px; border: 1px solid #E2E8F0;">
-                    <span style="font-size: 0.75rem; color: #64748B; display: block; margin-bottom: 4px; font-weight:600;">Date</span>
-                    <span id="detailTxDate" style="font-weight: 700; color: #0F172A; font-size: 0.95rem;"></span>
                 </div>
-                <div style="background: #F8FAFC; padding: 15px; border-radius: 12px; border: 1px solid #E2E8F0;">
-                    <span style="font-size: 0.75rem; color: #64748B; display: block; margin-bottom: 4px; font-weight:600;">Mode</span>
-                    <span id="detailTxMode" style="font-weight: 700; color: #0F172A; font-size: 0.95rem;">
-                        <i class="fa-solid fa-money-bill" style="margin-right:5px; color:#94A3B8;"></i> Cash
-                    </span> 
-                </div>
-            </div>
 
-            <div style="display: flex; gap: 12px;">
-                <button onclick="editCurrentTx()" style="flex:1; padding: 14px; border-radius: 12px; border: 1px solid #E2E8F0; background: white; color: #0F172A; font-weight: 600; cursor: pointer; font-size: 0.95rem;">
-                    <i class="fa-solid fa-pen" style="margin-right: 8px; color:#64748B;"></i> Edit
-                </button>
-                <button onclick="deleteCurrentTx()" style="flex:1; padding: 14px; border-radius: 12px; border: 1px solid #FEE2E2; background: #FEF2F2; color: #EF4444; font-weight: 600; cursor: pointer; font-size: 0.95rem;">
-                    <i class="fa-solid fa-trash" style="margin-right: 8px;"></i> Delete
-                </button>
-            </div>
-            
-            <div style="text-align: center; margin-top: 15px; padding-bottom: 10px;">
-                <span onclick="closeModals()" style="font-size: 0.9rem; color: #94A3B8; font-weight: 600; cursor: pointer; padding: 10px;">Close</span>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px;">
+                    <div style="background: #F8FAFC; padding: 15px; border-radius: 12px; border: 1px solid #E2E8F0;">
+                        <span
+                            style="font-size: 0.75rem; color: #64748B; display: block; margin-bottom: 4px; font-weight:600;">Date</span>
+                        <span id="detailTxDate" style="font-weight: 700; color: #0F172A; font-size: 0.95rem;"></span>
+                    </div>
+                    <div style="background: #F8FAFC; padding: 15px; border-radius: 12px; border: 1px solid #E2E8F0;">
+                        <span
+                            style="font-size: 0.75rem; color: #64748B; display: block; margin-bottom: 4px; font-weight:600;">Mode</span>
+                        <span id="detailTxMode" style="font-weight: 700; color: #0F172A; font-size: 0.95rem;">
+                            <i class="fa-solid fa-money-bill" style="margin-right:5px; color:#94A3B8;"></i> Cash
+                        </span>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 12px;">
+                    <button onclick="editCurrentTx()"
+                        style="flex:1; padding: 14px; border-radius: 12px; border: 1px solid #E2E8F0; background: white; color: #0F172A; font-weight: 600; cursor: pointer; font-size: 0.95rem;">
+                        <i class="fa-solid fa-pen" style="margin-right: 8px; color:#64748B;"></i> Edit
+                    </button>
+                    <button onclick="deleteCurrentTx()"
+                        style="flex:1; padding: 14px; border-radius: 12px; border: 1px solid #FEE2E2; background: #FEF2F2; color: #EF4444; font-weight: 600; cursor: pointer; font-size: 0.95rem;">
+                        <i class="fa-solid fa-trash" style="margin-right: 8px;"></i> Delete
+                    </button>
+                </div>
+
+                <div style="text-align: center; margin-top: 15px; padding-bottom: 10px;">
+                    <span onclick="closeModals()"
+                        style="font-size: 0.9rem; color: #94A3B8; font-weight: 600; cursor: pointer; padding: 10px;">Close</span>
+                </div>
             </div>
         </div>
     </div>
-</div>
+    <div class="slide-modal-overlay" id="modalMoneyFilter">
+        <div class="slide-modal-card">
+            <div
+                style="padding: 20px; border-bottom: 1px solid #F1F5F9; display:flex; justify-content:space-between; align-items:center;">
+                <h3 style="margin:0">Filter Transactions</h3>
+                <span onclick="closeModals()" style="font-size:1.5rem; color:#94A3B8; cursor:pointer;">&times;</span>
+            </div>
+            <div style="padding: 20px;">
+                <label class="form-label">Transaction Type</label>
+                <div style="display:flex; gap:10px; margin-bottom:20px;">
+                    <button class="filter-type-btn active" id="mf-all" onclick="setMFilterType('all')"
+                        style="flex:1; padding:10px; border:1px solid #E2E8F0; border-radius:8px; background:white;">All</button>
+                    <button class="filter-type-btn" id="mf-credit" onclick="setMFilterType('credit')"
+                        style="flex:1; padding:10px; border:1px solid #E2E8F0; border-radius:8px; background:white; color:var(--green);">Income</button>
+                    <button class="filter-type-btn" id="mf-debit" onclick="setMFilterType('debit')"
+                        style="flex:1; padding:10px; border:1px solid #E2E8F0; border-radius:8px; background:white; color:var(--red);">Expense</button>
+                </div>
+
+                <label class="form-label">Date Range (Optional)</label>
+                <div style="display:flex; gap:10px; margin-bottom:20px;">
+                    <div style="flex:1;">
+                        <span style="font-size:0.75rem; color:#64748B;">From</span>
+                        <input type="date" id="mf-start" class="modern-input">
+                    </div>
+                    <div style="flex:1;">
+                        <span style="font-size:0.75rem; color:#64748B;">To</span>
+                        <input type="date" id="mf-end" class="modern-input">
+                    </div>
+                </div>
+
+                <button class="btn-primary" onclick="applyMoneyFilter()">Apply Filters</button>
+                <button onclick="clearMoneyFilter()"
+                    style="width:100%; margin-top:10px; background:white; border:none; padding:15px; color:#64748B; font-weight:600;">Clear
+                    & Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-modal-overlay" id="modalPayrollFilter">
+        <div class="slide-modal-card">
+            <div
+                style="padding: 20px; border-bottom: 1px solid #F1F5F9; display:flex; justify-content:space-between; align-items:center;">
+                <h3 style="margin:0">Filter Payroll</h3>
+                <span onclick="closeModals()" style="font-size:1.5rem; color:#94A3B8; cursor:pointer;">&times;</span>
+            </div>
+            <div style="padding: 20px;">
+                <label class="form-label">Select Worker</label>
+                <select id="pf-worker" class="modern-input" style="margin-bottom:20px; background:white;">
+                    <option value="all">All Workers</option>
+                </select>
+
+                <label class="form-label">Date Range (Optional)</label>
+                <div style="display:flex; gap:10px; margin-bottom:20px;">
+                    <div style="flex:1;">
+                        <span style="font-size:0.75rem; color:#64748B;">From</span>
+                        <input type="date" id="pf-start" class="modern-input">
+                    </div>
+                    <div style="flex:1;">
+                        <span style="font-size:0.75rem; color:#64748B;">To</span>
+                        <input type="date" id="pf-end" class="modern-input">
+                    </div>
+                </div>
+
+                <button class="btn-primary" onclick="applyPayrollFilter()">Apply Filters</button>
+                <button onclick="clearPayrollFilter()"
+                    style="width:100%; margin-top:10px; background:white; border:none; padding:15px; color:#64748B; font-weight:600;">Clear
+                    & Reset</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         // --- CONFIGURATION ---
@@ -1477,6 +1596,8 @@
         let payrollViewMode = 'month';
         let currentPayrollDate = new Date(); // For month view
         let payrollSelectedDate = new Date().toISOString().split('T')[0]; // For day view
+        let moneyFilter = { active: false, type: 'all', start: null, end: null };
+        let payrollFilter = { active: false, workerId: 'all', start: null, end: null };
 
         // --- AUTH FETCH ---
         async function authFetch(url, options = {}) {
@@ -1544,45 +1665,66 @@
         function renderPayroll() {
             const locales = currentLang === 'hi' ? 'hi-IN' : 'en-US';
 
-            // 1. Setup Header & Date Logic
-            if (payrollViewMode === 'month') {
-                const monthStr = currentPayrollDate.toLocaleDateString(locales, { month: 'long', year: 'numeric' });
-                document.getElementById('payrollMonthDisplay').innerText = monthStr;
-            } else {
-                renderPayrollDateStrip();
-            }
-
-            // 2. Calculate "Total Work" (Wages) for the period
-            let totalWages = 0;
-            const siteWorkers = appData.workers.filter(w => w.siteId === appData.currentSiteId);
-
-            // Loop through all dates in the selected period to sum wages
-            // Note: This matches the logic in Labour.html but aggregates for ALL workers
+            // 1. UI Logic (Nav vs Custom Range)
+            const navContainer = document.getElementById('payrollNavContainer');
+            const customRange = document.getElementById('payrollCustomRangeDisplay');
+            const filterIcon = document.getElementById('payrollFilterIcon');
 
             let startDate, endDate;
-            if (payrollViewMode === 'month') {
-                startDate = new Date(currentPayrollDate.getFullYear(), currentPayrollDate.getMonth(), 1);
-                endDate = new Date(currentPayrollDate.getFullYear(), currentPayrollDate.getMonth() + 1, 0);
+
+            if (payrollFilter.active && payrollFilter.start && payrollFilter.end) {
+                // Custom Range Active
+                if (navContainer) navContainer.style.display = 'none';
+                if (customRange) customRange.style.display = 'block';
+
+                startDate = new Date(payrollFilter.start);
+                endDate = new Date(payrollFilter.end);
+
+                const sStr = startDate.toLocaleDateString(locales, { day: 'numeric', month: 'short' });
+                const eStr = endDate.toLocaleDateString(locales, { day: 'numeric', month: 'short' });
+                if (document.getElementById('payrollRangeText')) document.getElementById('payrollRangeText').innerText = `${sStr} - ${eStr}`;
+                if (filterIcon) filterIcon.style.color = 'var(--primary)';
+
             } else {
-                startDate = new Date(payrollSelectedDate);
-                endDate = new Date(payrollSelectedDate);
+                // Standard Nav Active
+                if (navContainer) navContainer.style.display = 'block';
+                if (customRange) customRange.style.display = 'none';
+                if (filterIcon) filterIcon.style.color = '#64748B';
+
+                if (payrollViewMode === 'month') {
+                    const monthStr = currentPayrollDate.toLocaleDateString(locales, { month: 'long', year: 'numeric' });
+                    if (document.getElementById('payrollMonthDisplay')) document.getElementById('payrollMonthDisplay').innerText = monthStr;
+                    startDate = new Date(currentPayrollDate.getFullYear(), currentPayrollDate.getMonth(), 1);
+                    endDate = new Date(currentPayrollDate.getFullYear(), currentPayrollDate.getMonth() + 1, 0);
+                } else {
+                    renderPayrollDateStrip();
+                    startDate = new Date(payrollSelectedDate);
+                    endDate = new Date(payrollSelectedDate);
+                }
             }
 
-            // Iterate days to calculate Total Wages Earned
+            // 2. Calculate Total Wages (Respecting Filters)
+            let totalWages = 0;
+
+            // Filter Workers based on site AND filter selection
+            const siteWorkers = appData.workers.filter(w => {
+                if (w.siteId !== appData.currentSiteId) return false;
+                if (payrollFilter.active && payrollFilter.workerId !== 'all') {
+                    return w.id == payrollFilter.workerId;
+                }
+                return true;
+            });
+
+            // Iterate Days Loop
             for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
                 const isoDate = d.toISOString().split('T')[0];
-
                 siteWorkers.forEach(w => {
                     const key = `${isoDate}-${w.id}`;
                     const log = appData.attendance[key];
-
                     if (log && log.status) {
                         if (log.status === 'P') {
                             totalWages += Number(w.wage);
-                            if (log.ot) {
-                                // Assuming OT calculation logic: (Wage / 8) * OT_Hours
-                                totalWages += (w.wage / 8) * Number(log.ot);
-                            }
+                            if (log.ot) totalWages += (w.wage / 8) * Number(log.ot);
                         } else if (log.status === 'H') {
                             totalWages += (w.wage / 2);
                         }
@@ -1590,70 +1732,52 @@
                 });
             }
 
-            // 3. Filter Transactions (Payments Only) for the list
-            // Only transactions with a workerId are considered "Labor Payments"
+            // 3. Filter Transactions (Payments)
             const list = document.getElementById('payrollList');
             list.innerHTML = '';
 
             const payTxs = appData.transactions.filter(t => {
-                // Must have a workerId to be a payroll transaction
                 if (!t.workerId || t.siteId !== appData.currentSiteId) return false;
 
-                const tDate = new Date(t.date);
-                if (payrollViewMode === 'month') {
-                    return tDate.getMonth() === currentPayrollDate.getMonth() &&
-                        tDate.getFullYear() === currentPayrollDate.getFullYear();
-                } else {
-                    return t.date === payrollSelectedDate;
+                // Filter by Worker
+                if (payrollFilter.active && payrollFilter.workerId !== 'all') {
+                    if (t.workerId != payrollFilter.workerId) return false;
                 }
+
+                // Filter by Date
+                const tDate = new Date(t.date);
+                return tDate >= startDate && tDate <= endDate;
             });
 
             let totalPaid = 0;
 
-            // 4. Render List
             payTxs.sort((a, b) => new Date(b.date) - new Date(a.date)).forEach(tx => {
                 totalPaid += Number(tx.amount);
-
-                // Find worker name for display
                 const w = appData.workers.find(worker => worker.id === tx.workerId);
-                const wName = w ? w.name : "Unknown Worker";
+                const wName = w ? w.name : "Unknown";
 
                 const div = document.createElement('div');
                 div.className = 'tx-card';
-                div.onclick = () => openTxDetail(tx.id); // Reusing existing Tx detail modal
-
-                // Reusing existing CSS classes for styling
+                div.onclick = () => openTxDetail(tx.id);
                 div.innerHTML = `
-                <div class="tx-left">
-                    <div class="avatar" style="width:40px; height:40px; background:#EEF2FF; color:var(--primary); border-radius:12px;">
-                        ${wName.charAt(0)}
-                    </div>
-                    <div class="tx-meta" style="margin-left:10px;">
-                        <h4 style="margin:0; font-size:0.95rem;">${wName}</h4>
-                        <span style="font-size:0.8rem; color:#64748B;">${new Date(tx.date).toLocaleDateString(locales)} • Payment</span>
-                    </div>
-                </div>
-                <div class="tx-amount" style="color: #f87171; font-weight:700;">-₹${tx.amount}</div>
-            `;
+        <div class="tx-left">
+            <div class="avatar" style="width:40px; height:40px; background:#EEF2FF; color:var(--primary); border-radius:12px;">${wName.charAt(0)}</div>
+            <div class="tx-meta" style="margin-left:10px;">
+                <h4 style="margin:0; font-size:0.95rem;">${wName}</h4>
+                <span style="font-size:0.8rem; color:#64748B;">${new Date(tx.date).toLocaleDateString(locales)} • Payment</span>
+            </div>
+        </div>
+        <div class="tx-amount" style="color: #f87171; font-weight:700;">-₹${tx.amount}</div>
+        `;
                 list.appendChild(div);
             });
 
-            if (payTxs.length === 0) {
-                list.innerHTML = `<div style="text-align:center; padding:40px; color:#94A3B8;">${currentLang === 'hi' ? "कोई भुगतान नहीं" : "No payments made"}</div>`;
-            }
+            if (payTxs.length === 0) list.innerHTML = `<div style="text-align:center; padding:40px; color:#94A3B8;">${currentLang === 'hi' ? "कोई भुगतान नहीं" : "No payments found"}</div>`;
 
-            // 5. Update Summary Card
-            const pending = totalWages - totalPaid;
-
+            // 4. Update Summary
             document.getElementById('payrollTotalWork').innerText = '₹' + Math.floor(totalWages);
             document.getElementById('payrollTotalPaid').innerText = '₹' + Math.floor(totalPaid);
-
-            const dueEl = document.getElementById('payrollDueDisplay');
-            dueEl.innerText = '₹' + Math.floor(pending);
-
-            // Color logic: If pending is positive (we owe money), show standard text (or red/orange).
-            // If pending is negative (we overpaid), maybe show green.
-            // For simplicity, keeping it standard white/light as per background.
+            document.getElementById('payrollDueDisplay').innerText = '₹' + Math.floor(totalWages - totalPaid);
         }
         // --- INIT FUNCTION ---
         async function init() {
@@ -2063,43 +2187,92 @@
 
         function renderMoney() {
             const locales = currentLang === 'hi' ? 'hi-IN' : 'en-US';
-            if (moneyViewMode === 'month') {
-                const monthStr = currentMoneyDate.toLocaleDateString(locales, { month: 'long', year: 'numeric' });
-                document.getElementById('moneyMonthDisplay').innerText = monthStr;
+
+            // 1. Handle Navigation UI vs Custom Range UI
+            const navContainer = document.getElementById('moneyNavContainer');
+            const customRange = document.getElementById('moneyCustomRangeDisplay');
+            const filterIcon = document.getElementById('moneyFilterIcon');
+
+            if (moneyFilter.active && moneyFilter.start && moneyFilter.end) {
+                // Custom Date Mode
+                navContainer.style.display = 'none';
+                customRange.style.display = 'block';
+                const s = new Date(moneyFilter.start).toLocaleDateString(locales, { day: 'numeric', month: 'short' });
+                const e = new Date(moneyFilter.end).toLocaleDateString(locales, { day: 'numeric', month: 'short' });
+                document.getElementById('moneyRangeText').innerText = `${s} - ${e}`;
+                filterIcon.style.color = 'var(--primary)'; // Highlight icon
             } else {
-                renderMoneyDateStrip();
+                // Standard Mode
+                navContainer.style.display = 'block';
+                customRange.style.display = 'none';
+                filterIcon.style.color = '#64748B';
+
+                if (moneyViewMode === 'month') {
+                    const monthStr = currentMoneyDate.toLocaleDateString(locales, { month: 'long', year: 'numeric' });
+                    document.getElementById('moneyMonthDisplay').innerText = monthStr;
+                } else {
+                    renderMoneyDateStrip();
+                }
             }
 
+            // 2. Filter Data
             const list = document.getElementById('txList');
             list.innerHTML = '';
+
             const txs = appData.transactions.filter(t => {
-                const tDate = new Date(t.date);
+                // Site Check
                 if (t.siteId !== appData.currentSiteId) return false;
-                if (moneyViewMode === 'month') {
-                    return tDate.getMonth() === currentMoneyDate.getMonth() &&
-                        tDate.getFullYear() === currentMoneyDate.getFullYear();
+
+                // Type Check (from Filter)
+                if (moneyFilter.active && moneyFilter.type !== 'all' && t.type !== moneyFilter.type) return false;
+
+                // Date Check
+                const tDate = new Date(t.date);
+
+                if (moneyFilter.active && moneyFilter.start && moneyFilter.end) {
+                    // Check Custom Range
+                    const s = new Date(moneyFilter.start);
+                    const e = new Date(moneyFilter.end);
+                    return tDate >= s && tDate <= e;
                 } else {
-                    return t.date === moneySelectedDate;
+                    // Use Standard Navigation (Month/Day)
+                    if (moneyViewMode === 'month') {
+                        return tDate.getMonth() === currentMoneyDate.getMonth() &&
+                            tDate.getFullYear() === currentMoneyDate.getFullYear();
+                    } else {
+                        return t.date === moneySelectedDate;
+                    }
                 }
             });
 
+            // 3. Render List & Calc Totals
             let totalIn = 0, totalOut = 0;
             txs.sort((a, b) => new Date(b.date) - new Date(a.date)).forEach(tx => {
                 if (tx.type === 'credit') totalIn += Number(tx.amount); else totalOut += Number(tx.amount);
+
                 const div = document.createElement('div');
                 div.className = 'tx-card';
                 div.onclick = () => openTxDetail(tx.id);
+
+                // Find worker name if exists
+                let subText = new Date(tx.date).toLocaleDateString(locales);
+                if (tx.workerId) {
+                    const w = appData.workers.find(wk => wk.id === tx.workerId);
+                    if (w) subText += ` • ${w.name}`;
+                }
+
                 div.innerHTML = `
-                <div class="tx-left">
-                    <div class="tx-icon ${tx.type === 'credit' ? 'in' : 'out'}"><i class="fa-solid ${tx.type === 'credit' ? 'fa-arrow-down' : 'fa-arrow-up'}"></i></div>
-                    <div class="tx-meta"><h4>${tx.desc}</h4><span>${new Date(tx.date).toLocaleDateString(locales)}</span></div>
-                </div>
-                <div class="tx-amount" style="color: ${tx.type === 'credit' ? 'var(--green)' : 'var(--red)'}">${tx.type === 'credit' ? '+' : '-'}₹${tx.amount}</div>
-            `;
+        <div class="tx-left">
+            <div class="tx-icon ${tx.type === 'credit' ? 'in' : 'out'}"><i class="fa-solid ${tx.type === 'credit' ? 'fa-arrow-down' : 'fa-arrow-up'}"></i></div>
+            <div class="tx-meta"><h4>${tx.desc}</h4><span>${subText}</span></div>
+        </div>
+        <div class="tx-amount" style="color: ${tx.type === 'credit' ? 'var(--green)' : 'var(--red)'}">${tx.type === 'credit' ? '+' : '-'}₹${tx.amount}</div>
+        `;
                 list.appendChild(div);
             });
 
-            if (txs.length === 0) list.innerHTML = `<div style="text-align:center; padding:40px; color:#666;">${currentLang === 'hi' ? "कोई लेन-देन नहीं" : "No transactions"}</div>`;
+            if (txs.length === 0) list.innerHTML = `<div style="text-align:center; padding:40px; color:#94A3B8;">${currentLang === 'hi' ? "कोई लेन-देन नहीं" : "No transactions found"}</div>`;
+
             document.getElementById('totalIn').innerText = '₹' + totalIn;
             document.getElementById('totalOut').innerText = '₹' + totalOut;
             document.getElementById('balanceDisplay').innerText = '₹' + (totalIn - totalOut);
@@ -2214,25 +2387,25 @@
             viewingTxId = id;
             const tx = appData.transactions.find(t => t.id === id);
             if (!tx) return;
-            
+
             const locales = currentLang === 'hi' ? 'hi-IN' : 'en-US';
-            
+
             // 1. Set Text Data
             document.getElementById('detailTxDate').innerText = new Date(tx.date).toLocaleDateString(locales, { day: 'numeric', month: 'short', year: 'numeric' });
             document.getElementById('detailTxDesc').innerText = tx.desc || (currentLang === 'hi' ? 'कोई विवरण नहीं' : 'No description provided');
             document.getElementById('detailTxAmount').innerText = `₹${tx.amount}`;
-            
+
             // 2. Visual Logic (Colors & Icons)
             const iconEl = document.getElementById('txDetailIcon');
             const typeLabel = document.getElementById('detailTxType');
             const amtEl = document.getElementById('detailTxAmount');
-            
+
             if (tx.type === 'credit') {
                 // INCOME STYLING
                 iconEl.style.background = '#DCFCE7'; // Light Green
                 iconEl.style.color = '#166534';      // Dark Green
                 iconEl.innerHTML = '<i class="fa-solid fa-arrow-down"></i>';
-                
+
                 amtEl.style.color = '#166534';
                 typeLabel.innerText = currentLang === 'hi' ? 'प्राप्त हुआ (Received)' : 'Payment Received';
             } else {
@@ -2240,7 +2413,7 @@
                 iconEl.style.background = '#FEE2E2'; // Light Red
                 iconEl.style.color = '#DC2626';      // Dark Red
                 iconEl.innerHTML = '<i class="fa-solid fa-arrow-up"></i>';
-                
+
                 amtEl.style.color = '#DC2626';
                 typeLabel.innerText = currentLang === 'hi' ? 'खर्च (Expense)' : 'Expense Paid';
             }
@@ -2504,8 +2677,91 @@
 
         // Initialize App
         init();
+        // --- MONEY FILTER LOGIC ---
+        function openMoneyFilter() {
+            document.getElementById('modalMoneyFilter').classList.add('active');
+        }
+
+        function setMFilterType(type) {
+            moneyFilter.type = type;
+            document.querySelectorAll('.filter-type-btn').forEach(b => {
+                b.style.background = 'white';
+                b.style.borderColor = '#E2E8F0';
+            });
+            const activeBtn = document.getElementById(`mf-${type}`);
+            activeBtn.style.background = '#F1F5F9';
+            activeBtn.style.borderColor = '#94A3B8';
+        }
+
+        function applyMoneyFilter() {
+            const start = document.getElementById('mf-start').value;
+            const end = document.getElementById('mf-end').value;
+
+            moneyFilter.active = true;
+            if (start && end) {
+                moneyFilter.start = start;
+                moneyFilter.end = end;
+            } else {
+                moneyFilter.start = null;
+                moneyFilter.end = null;
+            }
+
+            closeModals();
+            renderMoney();
+        }
+
+        function clearMoneyFilter() {
+            moneyFilter = { active: false, type: 'all', start: null, end: null };
+            document.getElementById('mf-start').value = '';
+            document.getElementById('mf-end').value = '';
+            setMFilterType('all');
+            closeModals();
+            renderMoney();
+        }
+
+        // --- PAYROLL FILTER LOGIC ---
+        function openPayrollFilter() {
+            // Populate Workers Dropdown
+            const select = document.getElementById('pf-worker');
+            select.innerHTML = '<option value="all">All Workers</option>';
+            const siteWorkers = appData.workers.filter(w => w.siteId === appData.currentSiteId);
+            siteWorkers.forEach(w => {
+                const opt = document.createElement('option');
+                opt.value = w.id;
+                opt.innerText = w.name;
+                select.appendChild(opt);
+            });
+
+            document.getElementById('modalPayrollFilter').classList.add('active');
+        }
+
+        function applyPayrollFilter() {
+            const wId = document.getElementById('pf-worker').value;
+            const start = document.getElementById('pf-start').value;
+            const end = document.getElementById('pf-end').value;
+
+            payrollFilter.active = true;
+            payrollFilter.workerId = wId;
+            if (start && end) {
+                payrollFilter.start = start;
+                payrollFilter.end = end;
+            } else {
+                payrollFilter.start = null;
+                payrollFilter.end = null;
+            }
+
+            closeModals();
+            renderPayroll();
+        }
+
+        function clearPayrollFilter() {
+            payrollFilter = { active: false, workerId: 'all', start: null, end: null };
+            document.getElementById('pf-start').value = '';
+            document.getElementById('pf-end').value = '';
+            closeModals();
+            renderPayroll();
+        }
     </script>
 </body>
 
 </html>
-
